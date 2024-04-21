@@ -1,0 +1,27 @@
+.form-login {
+  width: 26rem !important;
+  border-radius: 56px !important;
+}
+
+.logo {
+  width: 40%;
+}
+
+.input-login {
+  background-color: #eeeeee;
+  border-radius: 20px;
+}
+
+.button-submit {
+  background-color: #791021;
+}
+
+.not-acount {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.not-acount a {
+  color: #F4D010;
+  text-decoration: none;
+}
