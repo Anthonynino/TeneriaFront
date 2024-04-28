@@ -1,27 +1,24 @@
 .form-login {
   width: 26rem !important;
-  border-radius: 56px !important;
 }
 
 .logo {
   width: 40%;
 }
 
-.input-login {
-  background-color: #eeeeee;
-  border-radius: 20px;
-}
-
 .button-submit {
   background-color: #791021;
+  transition: all 0.5s;
 }
 
-.not-acount {
-  font-weight: 500;
-  font-size: 18px;
+.shadow-box {
+  box-shadow: -5px -5px 15px #791021, 5px 5px 15px #F4D010;
 }
 
-.not-acount a {
-  color: #F4D010;
-  text-decoration: none;
+.button-submit:hover {
+ background-color: #F4D010;
+}
+
+.no-underline {
+  text-decoration: none !important;
 }
