@@ -2,6 +2,12 @@
   width: 26rem !important;
 }
 
+.menu {
+  background: #791021;
+  width: 380px;
+  height: 100%;
+}
+
 .logo {
   width: 40%;
 }
@@ -21,4 +27,11 @@
 
 .no-underline {
   text-decoration: none !important;
+}
+
+.card-scale {
+  transition: all 0.5s;
+  &:hover {
+    transform: scale(1.03);
+  }
 }
