@@ -64,7 +64,7 @@ export const cards = [
       },
       {
         id:2,
-        link: "/",
+        link: "/add-product",
         icon:<FaArrowRightLong className="position-absolute mx-2" style={{ top: "10px" }} size={30}/>,
         title:"Realizar Ingreso"
       },

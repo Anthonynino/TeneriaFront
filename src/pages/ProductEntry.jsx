@@ -70,22 +70,29 @@ const ProductForm = () => {
                     <label  className="fw-semibold form-label">Cantidad</label>
                     <input type="text" className="shadow-sm form-control" id="exampleFormControlInput1" placeholder="Ingrese"/>
                 </div>
+                
           </div>
           {category === '3' && (
             <div className="row">
-                <div className="mb-3 col-4">
+                <div className="mb-2 col-4">
                     <label  className="fw-semibold form-label">Talla</label>
                     <input type="text" className="shadow-sm form-control" id="exampleFormControlInput1" placeholder="Ingrese"/>
                 </div>
             </div>)}
         {category === '6' && (
             <div className="row">
-                <div className="mb-3 col-4">
+                <div className="mb-2 col-4">
                     <label  className="fw-semibold form-label">Tamano</label>
                     <input type="text" className="shadow-sm form-control" id="exampleFormControlInput1" placeholder="Ingrese"/>
                 </div>
             </div>)}
+            <div className="row justify-content-end ">
+                <div className="col-3">
+                  <button className=" btn btn-success fw-semibold">Agregar producto</button>
+                </div>
+            </div>
         </div>
+        
       </div>
     </>
      );
