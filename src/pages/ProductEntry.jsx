@@ -7,7 +7,6 @@ const ProductForm = () => {
 
     const [category, setCategory] = useState('')
     const handleCategory = (event) =>{
-        console.log(event.target.value);
         setCategory(event.target.value)
     }
 
