@@ -17,6 +17,10 @@
   transition: all 0.5s;
 }
 
+::-webkit-scrollbar { /* eliminia toda la barra de scroll */
+  display: none;
+}
+
 .shadow-box {
   box-shadow: -5px -5px 15px #791021, 5px 5px 15px #F4D010;
 }
