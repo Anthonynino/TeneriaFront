@@ -54,7 +54,7 @@ function WelcomePage() {
         <div className="carousel-inner p-5 my-auto">
         {
           welcomeCards.map((w) => (
-            <div key={w.id} className="carousel-item active bg-light p-4 rounded-3">
+            <div key={w.id} className="carousel-item active bg-light p-4 rounded-3" style={{minHeight:"200px"}}>
             <h2 style={{color:"#791021"}} className="text-center fw-bold">{w.title}</h2>
             <p className="fs-6">
               {w.description}

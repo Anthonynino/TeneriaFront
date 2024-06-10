@@ -12,37 +12,37 @@ import { GiNails } from "react-icons/gi";
 
 export const cards = [
       {
-        id: 0,
+        id: 1,
         title: "Electricidad",
         color: "#FFD700",
         icon: <IoBulbSharp size={70}/>,
       },
       {
-        id: 1,
+        id: 2,
         title: "Plomería",
         color: "#E65A24",
         icon: <AiFillTool  size={70}/>,
       },
       {
-        id: 2,
+        id: 3,
         title: "S.Laboral",
         color: "#2F4F4F",
         icon: <FaHelmetSafety size={70}/>,
       },
       {
-        id: 3,
+        id: 4,
         title: "Metalurgia",
         color: " #999999",
         icon: <GiSolderingIron size={70} />,
       },
       {
-        id: 4,
+        id: 5,
         title: "Pintura",
         color: "#801817",
         icon: <GiLargePaintBrush size={70}/>,
       },
       {
-        id: 5,
+        id: 6,
         title: "Tornillería",
         color: "#4E3D2E",
         icon: <GiNails size={70}/>,
@@ -52,7 +52,7 @@ export const cards = [
   export const menuOption = [
       {
         id:0,
-        link: "/",
+        link: "/homepage",
         icon:<MdCategory className="position-absolute mx-2" style={{ top: "10px" }} size={30}/>,
         title:"Ver Categorías"
       },
