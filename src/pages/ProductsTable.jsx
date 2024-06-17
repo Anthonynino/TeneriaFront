@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom'
 import { FaPlus} from 'react-icons/fa'
 import { FaTrashAlt } from 'react-icons/fa'
 import Navbar from '../Navbar'
+import { getProductsRequest } from '../api/products'
 
 function ProductsTable() {
   const { categoryId, nameCategory } = useParams()
@@ -20,18 +21,20 @@ function ProductsTable() {
   const [rowsPerPage, setRowsPerPage] = useState(10) //Calcula las filas por pagina
   const [rowProducts, setRowProducts] = useState([]) //Guarda las filas que se van agregando a la tabla
 
+  const getProducts = async () =>{
+    const res = await getProductsRequest(categoryId)
+    setProducts(res.data)
+    console.log(res);
+  }
+
   useEffect(() => {
     try {
-      axios
-        .get(`http://localhost:8000/api/products/${categoryId}`, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          setProducts(res.data)
-        })
+      getProducts()
     } catch (error) {
       console.error('Error fetching data:', error)
     }
+
+  
   }, [categoryId])
 
   const columnProducts = [
