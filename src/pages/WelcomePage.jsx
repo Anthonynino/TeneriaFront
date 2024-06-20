@@ -40,7 +40,6 @@ function WelcomePage() {
         <Link to="/login">
         <button
           className="text-white w-100 py-2 mt-4 mb-3 border rounded-pill fw-bold bg-warning"
-          type="submit"
         >
           Ingresar
         </button>

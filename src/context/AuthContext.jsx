@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
   // Función para cerrar sesión de usuarios.
   const logout = async () => {
     try {
-      const res = await logoutRequest()
+      await logoutRequest()
 
       // Eliminar el usuario de localStorage al cerrar sesión.
       localStorage.removeItem('user')

@@ -58,7 +58,7 @@ export const cards = [
       },
       {
         id:1,
-        link: "/",
+        link: "/verRepos",
         icon:<HiDocumentReport className="position-absolute mx-2" style={{ top: "10px" }} size={30}/>,
         title:"Ver Reportes"
       },
@@ -70,13 +70,13 @@ export const cards = [
       },
       {
         id:3,
-        link: "/",
+        link: "/RealizaSali",
         icon:<FaArrowLeftLong className="position-absolute mx-2" style={{ top: "10px" }} size={30}/>,
         title:"Realizar Salida"
       },
       {
         id:4,
-        link: "/",
+        link: "/login",
         icon:<ImExit className="position-absolute mx-2" style={{ top: "10px" }} size={30}/>,
         title:"Salir"
       },

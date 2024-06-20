@@ -7,33 +7,19 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import { TablePagination } from '@mui/material'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import { useParams } from 'react-router-dom'
-import { FaPlus} from 'react-icons/fa'
+import { FaPlus } from 'react-icons/fa'
 import { FaTrashAlt } from 'react-icons/fa'
 import Navbar from '../Navbar'
+import { getProductsRequest } from '../api/products'
 
 function ProductsTable() {
-  const { categoryId, nameCategory } = useParams()
-  const [products, setProducts] = useState([])
-  const [page, setPage] = useState(0) //Encargado de manejar la paginación de la tabla
-  const [rowsPerPage, setRowsPerPage] = useState(10) //Calcula las filas por pagina
-  const [rowProducts, setRowProducts] = useState([]) //Guarda las filas que se van agregando a la tabla
+  const { categoryId, nameCategory } = useParams(); // Parametros traidos desde el URL
+  const [page, setPage] = useState(0); // Encargado de manejar la paginación de la tabla
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Calcula las filas por página
+  const [rowProducts, setRowProducts] = useState([]); // Guarda las filas que se van agregando a la tabla
 
-  useEffect(() => {
-    try {
-      axios
-        .get(`http://localhost:8000/api/products/${categoryId}`, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          setProducts(res.data)
-        })
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    }
-  }, [categoryId])
-
+  //Columnas predefinidas para la tabla
   const columnProducts = [
     { id: 'add', label: 'Agregar', minWidth: 20 },
     { id: 'name', label: 'Nombre', minWidth: 70 },
@@ -43,33 +29,10 @@ function ProductsTable() {
     { id: 'size', label: 'Tamaño', minWidth: 70 },
   ]
 
-  function createDataProducts(size, ubication,code,quantity,name, add) {
+  const createDataProducts = (size, ubication, code, quantity, name, add) => {
     //define los datos que mostrarán en pantalla
-    return {size, ubication,code,quantity, name, add }
+    return { size, ubication, code, quantity, name, add }
   }
-
-  useEffect(() => {
-    if (products) {
-      const processedDataProducts = products.map((prod, index) => {
-        // Procesar cada dato para extraer la información deseada
-        const icons = [
-          <FaTrashAlt
-            key={`prodTrash${index}`}
-            className="mx-2"
-            size={20}
-            type="button"
-          />,
-        ]
-        const name = prod.name
-        const quantity = prod.quantity
-        const code = prod.code
-        const ubication = prod.ubication
-        const size = prod.size
-        return createDataProducts(size,ubication, code, quantity ,name, icons)
-      })
-      setRowProducts(processedDataProducts)
-    }
-  }, [products])
 
   const handleChangePage = (event, newPage) => {
     event.preventDefault()
@@ -80,11 +43,54 @@ function ProductsTable() {
     setRowsPerPage(+event.target.value)
     setPage(0)
   }
+  
+  const handleDeleteProduct = (index) => {
+    setRowProducts((prevRows) => prevRows.filter((_, i) => i !== index));
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getProductsRequest(categoryId);
+        const processedDataProducts = res.data.map((prod, index) => {
+          // Procesar cada dato para extraer la información deseada
+          const icons = parseInt(prod.quantity) === 0
+            ? <FaTrashAlt
+                key={`prodTrash${index}`}
+                className="mx-2"
+                size={20}
+                type="button"
+                onClick={() => handleDeleteProduct(index)}
+              />
+            : null;
+          const name = prod.name;
+          const quantity = prod.quantity;
+          const code = prod.code;
+          const ubication = prod.ubication;
+          const size = prod.size;
+          return createDataProducts(
+            size,
+            ubication,
+            code,
+            quantity,
+            name,
+            icons
+          );
+        });
+
+        setRowProducts(processedDataProducts);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [categoryId]);
 
   return (
     <div className="d-flex">
       <Navbar />
-      <div className="row my-auto mx-auto" style={{ width:"74%" }}>
+      <div className="row my-auto mx-auto" style={{ width: '74%' }}>
         <h1 className="text-center fw-bold mb-4" style={{ color: '#791021' }}>
           {nameCategory}
         </h1>
@@ -96,12 +102,8 @@ function ProductsTable() {
             margin: 'auto',
           }}
         >
-          <TableContainer sx={{ minHeight: 450, borderRadius: '5px'}}>
-            <Table
-              stickyHeader
-              aria-label="sticky table"
-
-            >
+          <TableContainer sx={{ minHeight: 450, borderRadius: '5px' }}>
+            <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
                   {columnProducts.map((column) => (
@@ -113,11 +115,10 @@ function ProductsTable() {
                         backgroundColor: '#791021',
                         color: '#fff',
                       }}
-                    >                                  {column.label == "Agregar" && (
-                        <FaPlus
-                          className="text-white mx-1"
-                          size={20}
-                        />
+                    >
+                      {' '}
+                      {column.label == 'Agregar' && (
+                        <FaPlus className="text-white mx-1" size={20} />
                       )}
                       {column.label}
                     </TableCell>
