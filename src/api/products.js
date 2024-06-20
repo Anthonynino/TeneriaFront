@@ -7,3 +7,7 @@ export const getProductsRequest = (categoryId) => {
 export const getProductRequest = (id) => {
   return axios.get(`/products/${id}`);
 };
+
+export const deleteProductRequest = (id) => {
+  return axios.delete(`/products/${id}`);
+};
