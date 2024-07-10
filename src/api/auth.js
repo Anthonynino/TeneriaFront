@@ -1,7 +1,7 @@
 import axios from './axios'
 
 export const loginRequest = (user, password) =>
-  axios.post(`/login`, { username: user, password: password })
+  axios.post(`/login`, { username: user, password })
 
 export const logoutRequest = () => axios.post(`/logout`)
 

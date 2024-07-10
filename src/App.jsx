@@ -18,7 +18,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route element={<ProtectedRouter />}>
               <Route path="/homepage" element={<Homepage />} />
-              <Route path="/add-product" element={<ProductForm />} />
+              <Route path="/add-product/:categoryId?" element={<ProductForm />} />
               <Route path="/homepage/productstable/:categoryId/:nameCategory" element={<ProductsTable />} />
             </Route>
           </Routes>

@@ -10,10 +10,12 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FaPlus } from 'react-icons/fa'
 import { FaTrashAlt } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
 import Navbar from '../Navbar'
 import { getProductsRequest } from '../api/products'
 
 function ProductsTable() {
+  const navigate = useNavigate(); // Hook para navegar entre páginas
   const { categoryId, nameCategory } = useParams(); // Parametros traidos desde el URL
   const [page, setPage] = useState(0); // Encargado de manejar la paginación de la tabla
   const [rowsPerPage, setRowsPerPage] = useState(10); // Calcula las filas por página
@@ -88,9 +90,9 @@ function ProductsTable() {
   }, [categoryId]);
 
   return (
-    <div className="d-flex">
+    <div className="d-flex" style={{minHeight:"100vh"}}>
       <Navbar />
-      <div className="row my-auto mx-auto" style={{ width: '74%' }}>
+      <div className="row my-auto mx-auto" style={{ width: '70%' }}>
         <h1 className="text-center fw-bold mb-4" style={{ color: '#791021' }}>
           {nameCategory}
         </h1>
@@ -118,7 +120,7 @@ function ProductsTable() {
                     >
                       {' '}
                       {column.label == 'Agregar' && (
-                        <FaPlus className="text-white mx-1" size={20} />
+                        <FaPlus className="text-white mx-1" type='button' size={20} onClick={() => navigate(`/add-product/${categoryId}`)} />
                       )}
                       {column.label}
                     </TableCell>
