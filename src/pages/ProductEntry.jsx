@@ -26,7 +26,6 @@ const ProductForm = () => {
     const quantityProduct = e.target[4].value
     const quantityInt = parseInt(quantityProduct)
     const size = e.target[5].value
-    console.log(quantityInt)
     if (
       categoryId === '' &&
       nameProduct === '' &&
