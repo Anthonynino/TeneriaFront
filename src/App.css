@@ -8,7 +8,7 @@
 }
 
 .logo {
-  width: 40%;
+  width: 100%;
 }
 
 .button-submit {
@@ -16,16 +16,17 @@
   transition: all 0.5s;
 }
 
-::-webkit-scrollbar { /* eliminia toda la barra de scroll */
+::-webkit-scrollbar {
+  /* eliminia toda la barra de scroll */
   display: none;
 }
 
 .shadow-box {
-  box-shadow: -5px -5px 15px #791021, 5px 5px 15px #F4D010;
+  box-shadow: -5px -5px 15px #791021, 5px 5px 15px #f4d010;
 }
 
 .button-submit:hover {
- background-color: #F4D010;
+  background-color: #f4d010;
 }
 
 .no-underline {
@@ -39,3 +40,35 @@
   }
 }
 
+.input-login::placeholder {
+  color: #fff;
+}
+
+.alert-animation {
+  animation: fade-in-out 3s ease-in-out;
+}
+
+.background-fallback {
+  background: url('../assets/Leathers.jpg') no-repeat center center fixed;
+  background-size: cover;
+  filter: brightness(50%);
+}
+
+@keyframes fade-in-out {
+  /* El alert empieza con opacidad 0 (invisible) */
+  0% {
+    opacity: 0;
+  }
+  /* El alert llega a opacidad 1 (visible) al 25% de la animación */
+  25% {
+    opacity: 1;
+  }
+  /* El alert mantiene la opacidad 1 hasta el 75% de la animación */
+  75% {
+    opacity: 1;
+  }
+  /* El alert vuelve a opacidad 0 (invisible) al final de la animación */
+  100% {
+    opacity: 0;
+  }
+}

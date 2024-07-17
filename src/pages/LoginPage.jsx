@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { GoAlertFill } from 'react-icons/go';
+import imgLeathers from "../assets/Leathers.jpg"
+import logo from "../assets/logo.png"
 
 function LoginPage() {
   const { signin, errors: loginErrors, isAuthenticated } = useAuth();
@@ -49,34 +51,40 @@ function LoginPage() {
 
   return (
     <>
+      <div className='vh-100 vw-100 position-absolute background-fallback'>
+        <img src={imgLeathers} className='vh-100 vw-100 position-absolute' style={{filter:"brightness(50%)"}}/>
+      </div>
       <div className="d-flex justify-content-center vh-100 align-items-center">
         <form
-          className="p-5 border rounded form-login rounded-5 my-auto shadow-box"
+          className="p-4 rounded form-login rounded-5 my-auto shadow-box"
+          style={{zIndex:"100"}}
           onSubmit={handleLogin}
         >
-          <h3 className="mb-3 fw-bold text-center">Iniciar sesión</h3>
-          <div className="text-center">
-            <img src="../src/assets/logo2.png" alt="" className="logo mb-4" />
+          <div className="text-center mx-auto d-flex" style={{maxWidth:"180px", height:"140px"}}>
+            <img src={logo} alt="" className="logo mb-2" />
           </div>
-          <div className="form-floating mb-4">
+          <div className="mb-3" >
+          <label className='text-white'><small>Usuario</small></label>
             <input
               type="text"
-              className="form-control shadow-sm bg-white rounded-4"
-              placeholder="name@example.com"
+              className="form-control shadow-sm rounded-4 py-2 text-white input-login"
+              placeholder="nombre@ejemplo.com"
+              style={{background:"transparent"}}
             />
-            <label>Usuario</label>
           </div>
-          <div className="form-floating">
+          <div className="mb-3">
+          <label className='text-white'><small>Contraseña</small></label>
             <input
               type="password"
-              className="form-control shadow-sm bg-white rounded-4"
-              placeholder="Contraseña"
+              className="form-control shadow-sm rounded-4 py-2 text-white input-login"
+              placeholder="contraseña"
+              style={{background:"transparent"}}
             />
-            <label>Contraseña</label>
           </div>
           <button
-            className="text-white w-100 py-2 mt-4 mb-3 border rounded-pill fw-bold button-submit"
+            className="text-white w-100 py-2 mt-4 mb-4 btn rounded-pill fw-bold button-submit"
             type="submit"
+            style={{filter:"opacity(0.8)"}}
           >
             Ingresar
           </button>
@@ -84,14 +92,16 @@ function LoginPage() {
       </div>
       {showAlert && (
         <div
-          className="alert position-fixed top-0 start-50 translate-middle-x mt-5 text-white"
-          style={{ background: '#DF3030' }}
+          className="alert position-fixed top-0 start-50 translate-middle-x mt-5 text-white alert-animation"
+          style={{ background: '#DF3030', zIndex: "100" }}
           role="alert"
         >
+          <div className="mb-2">
           <span style={{ marginRight: '0.5rem', fontSize: '1.5rem' }}>
             <GoAlertFill color="yellow" />
           </span>
           {alertMessage}
+          </div>
         </div>
       )}
     </>

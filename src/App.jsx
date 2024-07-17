@@ -7,6 +7,7 @@ import ProductForm from './pages/ProductEntry'
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRouter from './public/ProtectedRouter'
 import ProductsTable from './pages/ProductsTable'
+import CategoryPage from './pages/CategoryPage'
 
 function App() {
   return (
@@ -14,12 +15,19 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-          <Route path='/' element={<WelcomePage/>} />
+            <Route path="/" element={<WelcomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route element={<ProtectedRouter />}>
               <Route path="/homepage" element={<Homepage />} />
-              <Route path="/add-product" element={<ProductForm />} />
-              <Route path="/homepage/productstable/:categoryId/:nameCategory" element={<ProductsTable />} />
+              <Route
+                path="/add-product/:categoryId?"
+                element={<ProductForm />}
+              />
+              <Route
+                path="/homepage/productstable/:categoryId/:nameCategory"
+                element={<ProductsTable />}
+              />
+              <Route path="/category" element={<CategoryPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
