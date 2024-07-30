@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 function CategoryPage() {
   return (
     <>
+    <br/>
       <div className="d-flex" style={{minHeight:"100vh"}}>
         <Navbar/>
         <div className="w-50 row my-auto mx-auto ">

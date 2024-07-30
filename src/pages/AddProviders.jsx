@@ -1,9 +1,11 @@
 import Navbar from '../Navbar'
 
-
 const AddProviders = () => {
-    return ( 
-        <>
+  return (
+    <>
+      <br />
+      <br />
+      <br />
       <div className="d-flex" style={{ minHeight: '100vh' }}>
         <Navbar />
         <div className="w-50 row mt-5 h-50 mx-auto">
@@ -40,24 +42,32 @@ const AddProviders = () => {
               />
             </div>
             <div className="mb-3 col-4">
-            <label className="fw-semibold form-label">Esta en el territorio nacional?</label>
-            <div className="form-check">
-                <input className="form-check-input" type="radio" name="flexRadioDefault" checked/>
-                <label className="form-check-label">
-                    Si
-                </label>
-            </div>
-            <div className="form-check">
-                <input className="form-check-input" type="radio" name="flexRadioDefault" />
-                <label className="form-check-label">
-                    No
-                </label>
-            </div>
+              <label className="fw-semibold form-label">
+                Esta en el territorio nacional?
+              </label>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="flexRadioDefault"
+                  checked
+                />
+                <label className="form-check-label">Si</label>
+              </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="flexRadioDefault"
+                />
+                <label className="form-check-label">No</label>
+              </div>
             </div>
             <div className="row mt-2">
               <div className="col-12 d-flex justify-content-end">
                 <button
-                  className="btn btn-success fw-semibold px-3"
+                  className="btn fw-semibold px-3"
+                  style={{background: '#DAA520', color:"#ffff"}}
                   type="submit"
                 >
                   Agregar proveedor
@@ -67,9 +77,8 @@ const AddProviders = () => {
           </form>
         </div>
       </div>
-      
     </>
-    );
+  )
 }
- 
-export default AddProviders;
+
+export default AddProviders
