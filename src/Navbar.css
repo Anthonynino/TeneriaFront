@@ -1,0 +1,46 @@
+/* Estilo principal para el contenedor de la aplicación */
+.app-container {
+  display: flex;
+}
+
+/* Estilo para el menú lateral */
+.sidebar {
+  width: 300px;
+  background-color: #212225; /* Color de fondo oscuro */
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  padding-top: 120px;
+  box-sizing: border-box;
+}
+
+/* Estilo para el contenido principal */
+.main-content {
+  margin-left: 300px; /* Ajusta según el ancho del menú lateral */
+  flex-grow: 1;
+  padding-left: 20px;
+}
+
+/* Estilo para la barra de navegación */
+.navbar-custom {
+  background-color: #791021; /* Color de fondo de la barra de navegación */
+  position: fixed;
+  top: 0;
+  left: 0; /* Ajusta para que se alinee con el borde izquierdo del viewport */
+  width: 100vw; /* Ancho del 100% del viewport */
+  z-index: 1000;
+  display: flex;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.button-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.button-hover:hover {
+  transform: scale(1.05); /* Aumenta el tamaño del botón ligeramente */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Añade una sombra para dar un efecto de profundidad */
+}

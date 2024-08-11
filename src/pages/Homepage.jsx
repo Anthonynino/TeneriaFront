@@ -51,6 +51,7 @@ function Homepage() {
 
   return (
     <>
+      <br />
       <div className="d-flex" style={{ minHeight: '100vh' }}>
         <Navbar />
         <div className="w-50 row my-auto mx-auto">
