@@ -88,6 +88,11 @@ function LoginPage() {
           >
             Ingresar
           </button>
+          <div className='mt-3'>
+          <h6 className='text-white'>Credenciales de Invitado</h6>
+          <span className='text-white me-5'>Usuario: Invitado</span>
+          <span className='text-white ms-4'>Contraseña: SoyHomo</span>
+          </div>
         </form>
       </div>
       {showAlert && (

@@ -3,6 +3,7 @@ import { HiDocumentReport } from 'react-icons/hi'
 import { ImExit } from 'react-icons/im'
 import { FaArrowRightLong } from 'react-icons/fa6'
 import { FaArrowLeftLong } from 'react-icons/fa6'
+import { FaTruckArrowRight } from "react-icons/fa6";
 import { IoBulbSharp } from 'react-icons/io5'
 import { FaHelmetSafety } from 'react-icons/fa6'
 import { AiFillTool } from 'react-icons/ai'
@@ -113,6 +114,18 @@ export const menuOption = [
   },
   {
     id: 5,
+    link: '/add-provider',
+    icon: (
+      <FaTruckArrowRight
+        className="mx-2"
+        style={{ top: '10px' }}
+        size={30}
+      />
+    ),
+    title: 'Agregar proveedor',
+  },
+  {
+    id: 6,
     link: '/login',
     icon: (
       <ImExit

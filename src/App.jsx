@@ -8,6 +8,7 @@ import { AuthProvider } from './context/AuthContext'
 import ProtectedRouter from './public/ProtectedRouter'
 import ProductsTable from './pages/ProductsTable'
 import CategoryPage from './pages/CategoryPage'
+import AddProviders from './pages/AddProviders'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                 element={<ProductsTable />}
               />
               <Route path="/category" element={<CategoryPage />} />
+              <Route path="/add-provider" element={<AddProviders />} />
             </Route>
           </Routes>
         </BrowserRouter>
