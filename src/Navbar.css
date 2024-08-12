@@ -6,7 +6,7 @@
 /* Estilo para el menú lateral */
 .sidebar {
   width: 300px;
-  background-color: #212225; /* Color de fondo oscuro */
+  background: linear-gradient(to bottom, #791021, #3d0810);
   min-height: 100vh;
   position: fixed;
   top: 0;

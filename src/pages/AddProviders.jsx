@@ -1,14 +1,22 @@
 import Navbar from '../Navbar'
+import { useState } from 'react'
 
 const AddProviders = () => {
+  // Estado para controlar la selección del botón de radio
+  const [selectedOption, setSelectedOption] = useState('si')
+
+  // Maneja el cambio en los botones de radio
+  const handleRadioChange = (event) => {
+    setSelectedOption(event.target.value)
+  }
   return (
     <>
-      <br />
-      <br />
-      <br />
       <div className="d-flex" style={{ minHeight: '100vh' }}>
         <Navbar />
-        <div className="w-50 row mt-5 h-50 mx-auto">
+        <div
+          className="w-50 row mt-5 h-50 mx-auto"
+          style={{ paddingTop: '4rem' }}
+        >
           <h1 className="text-center fw-bold mb-5" style={{ color: '#791021' }}>
             ¿Que proveedor deseas agregar?
           </h1>
@@ -43,31 +51,42 @@ const AddProviders = () => {
             </div>
             <div className="mb-3 col-4">
               <label className="fw-semibold form-label">
-                Esta en el territorio nacional?
+                ¿Está en el territorio nacional?
               </label>
               <div className="form-check">
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="flexRadioDefault"
-                  checked
+                  id="radioSi"
+                  name="territorioNacional"
+                  value="si"
+                  checked={selectedOption === 'si'}
+                  onChange={handleRadioChange}
                 />
-                <label className="form-check-label">Si</label>
+                <label className="form-check-label" htmlFor="radioSi">
+                  Sí
+                </label>
               </div>
               <div className="form-check">
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="flexRadioDefault"
+                  id="radioNo"
+                  name="territorioNacional"
+                  value="no"
+                  checked={selectedOption === 'no'}
+                  onChange={handleRadioChange}
                 />
-                <label className="form-check-label">No</label>
+                <label className="form-check-label" htmlFor="radioNo">
+                  No
+                </label>
               </div>
             </div>
             <div className="row mt-2">
               <div className="col-12 d-flex justify-content-end">
                 <button
-                  className="btn fw-semibold px-3"
-                  style={{background: '#DAA520', color:"#ffff"}}
+                  className="btn fw-semibold px-3 button-hover"
+                  style={{ background: '#DAA520', color: '#ffff' }}
                   type="submit"
                 >
                   Agregar proveedor

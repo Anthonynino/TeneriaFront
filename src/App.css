@@ -22,11 +22,11 @@
 }
 
 .shadow-box {
-  box-shadow: -5px -5px 15px #791021, 5px 5px 15px #f4d010;
+  box-shadow: -5px -5px 15px #791021, 5px 5px 15px #DAA520;
 }
 
 .button-submit:hover {
-  background-color: #f4d010;
+  background-color: #DAA520;
 }
 
 .no-underline {
