@@ -120,7 +120,7 @@ function ProductsTable() {
                     >
                       {' '}
                       {column.label == 'Agregar' && (
-                        <FaPlus className="text-white mx-1" type='button' size={20} onClick={() => navigate(`/add-product/${categoryId}`)} />
+                        <FaPlus className="text-white mx-2" type='button' size={20} onClick={() => navigate(`/add-product/${categoryId}`)} />
                       )}
                       {column.label}
                     </TableCell>

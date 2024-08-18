@@ -1,22 +1,25 @@
-import { Link } from "react-router-dom";
-import imgLeathers from "../assets/Leathers.jpg"
-import imgTenería from "../assets/Planta-Teneria-Rubio.jpg"
-function WelcomePage() {
+import { Link } from 'react-router-dom'
+import imgLeathers from '../assets/Leathers2.jpg'
+import imgTenería from '../assets/Planta-Teneria-Rubio.jpg'
 
+function WelcomePage() {
   const welcomeCards = [
     {
       id: 0,
-      title: "Misión",
-      description: "Abastecer al sector manufacturero con los productos y características necesarias, en tiempo y calidad óptimos para garantizar la fluidez del mercado. Para ello, se ofrece productos innovadores con tecnología de punta que revolucionan el mercado que contribuyen al progreso del país.",
-      img: imgTenería
+      title: 'Misión',
+      description:
+        'Proveer al sector manufacturero con productos innovadores y tecnología avanzada para asegurar calidad y fluidez en el mercado. Contribuir al desarrollo del país con nuestros productos.',
+      img: imgTenería,
     },
     {
       id: 1,
-      title: "Vision",
-      description: "Permanecer como líder en el mercado nacional y expandir su presencia a mercados internacionales, ofreciendo productos de primera calidad que satisfagan las necesidades y expectativas de nuestros clientes.",
-      img: imgLeathers
+      title: 'Visión',
+      description:
+        'Permanecer como líder en el mercado nacional y expandir nuestra presencia a mercados internacionales, ofreciendo productos de primera calidad que satisfagan las necesidades de nuestros clientes.',
+      img: imgLeathers,
     },
   ]
+
   return (
     <>
       <nav className="navbar shadow fixed-top bg-light">
@@ -24,72 +27,76 @@ function WelcomePage() {
           <img
             src="../src/assets/logo1.png"
             alt=""
-            style={{ height: "60px", width: "80px" }}
+            style={{ height: '60px', width: '80px' }}
           />
-          <Link
-          to="/login"
-            className="navbar-brand fs-3 fw-bold txt-shadow"
-            style={{ color: "#791021" }}
-          >
-          ¡INGRESA YA! 
-          </Link>
         </div>
       </nav>
-      <div className="row mt-5" style={{minHeight:"100vh"}}>
-      <div className="col-4 p-5 text-center d-flex" style={{background:"#791021"}}>
-        <div className="my-auto">
-        <h1 className="text-warning">Bienvenido al sistema de </h1>
-        <h3 className="text-white">Tenería Rubio C.A</h3>
-        <Link to="/login">
-        <button
-          className="text-white w-100 py-2 mt-4 mb-3 btn rounded-pill fw-bold bg-warning"
-        >
-          Ingresar
-        </button>
-        </Link>
-        </div>
-      </div>
       <div
-        id="carouselExampleFade"
-        className="carousel slide carousel-fade col-8 p-5 bg-warning d-flex"
+        className="container mt-5"
+        style={{ minHeight: '100vh', minWidth: '100%' }}
       >
-        <div className="carousel-inner p-5 my-auto">
-        {
-          welcomeCards.map((w) => (
-            <div key={w.id} className="carousel-item active bg-light p-4 rounded-3" style={{minHeight:"420px"}}>
-            <h2 style={{color:"#791021"}} className="text-center fw-bold">{w.title}</h2>
-            <p className="fs-6" style={{fontFamily: "sans-serif", textAlign: "center"}}>
-              {w.description}
-            </p>
-            <div className="d-flex mx-auto" style={{maxWidth:"350px"}}>
-            <img src={w.img} style={{height:"200px", width:"100%"}} className="rounded-3"/> 
+        <div
+          className="row justify-content-center align-items-center"
+          style={{
+            minHeight: '90vh',
+            backgroundColor: '#791021',
+          }}
+        >
+          <div
+            className="col-6 text-center py-5"
+            style={{ backgroundColor: '#791021', color: '#fff' }}
+          >
+            <div>
+              <h1 className="text-warning">Bienvenido al sistema de</h1>
+              <h3 className="text-white">Tenería Rubio C.A</h3>
+              <Link to="/login">
+                <button
+                  className="text-white w-100 py-2 mt-4 mb-3 btn rounded-pill fw-bold button-hover"
+                  style={{ backgroundColor: '#DAA520' }}
+                >
+                  Ingresar
+                </button>
+              </Link>
             </div>
           </div>
-          ))
-        }
         </div>
-        <button
-          className="carousel-control-prev"
-          type="button"
-          data-bs-target="#carouselExampleFade"
-          data-bs-slide="prev"
+        <div
+          className="row justify-content-center align-items-center"
+          style={{ minHeight: '80vh', backgroundColor: '#DAA520' }}
         >
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button
-          className="carousel-control-next"
-          type="button"
-          data-bs-target="#carouselExampleFade"
-          data-bs-slide="next"
-        >
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Next</span>
-        </button>
-      </div>
+          {welcomeCards.map((w) => (
+            <div className="col-md-6 p-3" key={w.id}>
+              <div className="card shadow-sm d-flex flex-column">
+                <div className="card-body d-flex flex-column justify-content-between">
+                  <div className="text-center">
+                    <h2 style={{ color: '#791021' }} className="fw-bold">
+                      {w.title}
+                    </h2>
+                    <p
+                      className="fs-6 fw-bold"
+                      style={{ fontFamily: 'sans-serif' }}
+                    >
+                      {w.description}
+                    </p>
+                  </div>
+                  <img
+                    src={w.img}
+                    style={{
+                      height: '300px',
+                      width: 'auto',
+                      objectFit: 'cover',
+                    }}
+                    className="rounded-3 mt-3"
+                    alt={w.title}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </>
-  );
+  )
 }
 
-export default WelcomePage;
+export default WelcomePage

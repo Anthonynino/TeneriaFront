@@ -73,12 +73,12 @@ const ProductForm = () => {
 
   return (
     <>
-      <br />
-      <br />
-      <br />
       <div className="d-flex" style={{ minHeight: '100vh' }}>
         <Navbar />
-        <div className="w-50 row mt-5 h-50 mx-auto">
+        <div
+          className="w-50 row mt-5 h-50 mx-auto"
+          style={{ paddingTop: '3rem' }}
+        >
           <h1 className="text-center fw-bold mb-5" style={{ color: '#791021' }}>
             ¿Que desea agregar?
           </h1>
@@ -161,7 +161,7 @@ const ProductForm = () => {
             <div className="row mt-2">
               <div className="col-12 d-flex justify-content-end">
                 <button
-                  className="btn fw-semibold px-3"
+                  className="btn fw-semibold px-3 button-hover"
                   style={{ backgroundColor: '#DAA520', color: '#ffff' }}
                   type="submit"
                 >
