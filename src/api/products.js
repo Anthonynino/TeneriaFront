@@ -14,7 +14,8 @@ export const createProductRequest = (
   ubication,
   quantity,
   size,
-  categoryId
+  categoryId,
+  supplierId
 ) => {
   return axios.post(`/products`, {
     name,
@@ -23,5 +24,6 @@ export const createProductRequest = (
     quantity,
     size,
     categoryId,
+    supplierId
   })
 }

@@ -90,7 +90,7 @@ export const menuOption = [
   },
   {
     id: 3,
-    link: '/add-product',
+    link: '/homepage',
     icon: (
       <FaArrowRightLong
         className="mx-2"

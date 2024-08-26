@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { getAllCategories } from '../api/categories'
 import { createProductRequest } from '../api/products'
 import { GoAlertFill } from 'react-icons/go'
+import { getAllSuppliers } from '../api/suppliers'
 
 const ProductForm = () => {
   const { categoryId } = useParams()
@@ -12,25 +13,33 @@ const ProductForm = () => {
   const [showAlert, setShowAlert] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
   const [fadeOutTimeout, setFadeOutTimeout] = useState(null)
+  const [provider, setProvider] = useState()
+  const [getSuppliers, setGetSuppliers] = useState()
 
   const handleCategory = (event) => {
     setCategory(event.target.value)
   }
 
+  const handleProvider = (event) => {
+    setProvider(event.target.value)
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     const categoryId = e.target[0].value
-    const nameProduct = e.target[1].value
-    const codeProduct = e.target[2].value
-    const ubicationProduct = e.target[3].value
-    const quantityProduct = e.target[4].value
+    const supplierId = e.target[1].value
+    const nameProduct = e.target[2].value
+    const codeProduct = e.target[3].value
+    const ubicationProduct = e.target[4].value
+    const quantityProduct = e.target[5].value
     const quantityInt = parseInt(quantityProduct)
-    const size = e.target[5].value
+    const size = e.target[6].value
     if (
-      categoryId === '' &&
-      nameProduct === '' &&
-      codeProduct === '' &&
-      ubicationProduct === '' &&
+      categoryId === '' ||
+      supplierId === '' ||
+      nameProduct === '' ||
+      codeProduct === '' ||
+      ubicationProduct === '' ||
       quantityProduct === ''
     ) {
       triggerAlert('Los campos deben estar llenos')
@@ -41,7 +50,8 @@ const ProductForm = () => {
         ubicationProduct,
         quantityInt,
         size,
-        categoryId
+        categoryId,
+        supplierId
       )
     }
   }
@@ -63,6 +73,8 @@ const ProductForm = () => {
     const fetchData = async () => {
       const categoriesRes = await getAllCategories()
       setGetCategories(categoriesRes)
+      const suppliersRes = await getAllSuppliers()
+      setGetSuppliers(suppliersRes)
     }
     fetchData()
   }, [])
@@ -101,7 +113,23 @@ const ProductForm = () => {
                 })}
               </select>
             </div>
-            <div className="mb-3 col-8">
+            <div className="mb-3 col-md-4">
+              <label className="fw-semibold form-label">Proveedor</label>
+              <select
+                className="shadow-sm form-select"
+                aria-label="Proveedor"
+                value={provider}
+                onChange={handleProvider}
+              >
+                <option value="">Seleccione</option>
+                {getSuppliers?.data.map((prov) => (
+                  <option key={prov.id} value={prov.id}>
+                    {prov.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3 col-4">
               <label className="fw-semibold form-label">
                 Nombre del producto
               </label>
@@ -174,7 +202,7 @@ const ProductForm = () => {
       </div>
       {showAlert && (
         <div
-          className="alert position-fixed top-0 start-50 translate-middle-x mt-5 text-white alert-animation"
+          className="alert position-fixed bottom-0 end-0 mb-3 me-3 text-white alert-animation"
           style={{ background: '#DF3030', zIndex: '100' }}
           role="alert"
         >
