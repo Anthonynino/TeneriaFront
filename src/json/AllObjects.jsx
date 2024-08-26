@@ -102,7 +102,7 @@ export const menuOption = [
   },
   {
     id: 4,
-    link: '/homepage',
+    link: '/out-products',
     icon: (
       <FaArrowLeftLong
         className="mx-2"
