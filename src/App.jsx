@@ -3,7 +3,7 @@ import LoginPage from './pages/LoginPage'
 import Homepage from './pages/Homepage'
 import WelcomePage from './pages/WelcomePage'
 import './App.css'
-import ProductForm from './pages/Addproduct'
+import AddProduct from './pages/Addproduct'
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRouter from './public/ProtectedRouter'
 import ProductsTable from './pages/ProductsTable'
@@ -23,8 +23,8 @@ function App() {
             <Route element={<ProtectedRouter />}>
               <Route path="/homepage" element={<Homepage />} />
               <Route
-                path="/add-product/:categoryId?"
-                element={<ProductForm />}
+                path="/add-product"
+                element={<AddProduct />}
               />
               <Route
                 path="/homepage/productstable/:categoryId/:nameCategory"
