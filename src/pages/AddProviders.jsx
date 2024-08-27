@@ -1,3 +1,4 @@
+import { addSuppliersRequest } from '../api/suppliers'
 import Navbar from '../Navbar'
 import { useState } from 'react'
 
@@ -9,6 +10,49 @@ const AddProviders = () => {
   const handleRadioChange = (event) => {
     setSelectedOption(event.target.value)
   }
+  
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertMessage, setAlertMessage] = useState('')
+  const [fadeOutTimeout, setFadeOutTimeout] = useState(null)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const name = e.target[0].value
+    const rif = e.target[1].value
+    const ubication = e.target[2].value
+    
+    if (
+      name === '' ||
+      rif === '' ||
+      ubication === ''
+      
+    ) {
+      triggerAlert('Los campos deben estar llenos')
+    } else {
+      console.log({name, rif, ubication});
+      
+      await addSuppliersRequest(
+        name,
+        rif,
+        ubication,
+      )
+    }
+  }
+
+  const triggerAlert = (message) => {
+    setAlertMessage(message)
+    setShowAlert(true)
+    // Si hay un timeout en proceso, lo limpiamos
+    if (fadeOutTimeout) clearTimeout(fadeOutTimeout)
+    // Configuramos el timeout para desvanecer la alerta
+    const timeout = setTimeout(() => {
+      setShowAlert(false)
+      setAlertMessage('')
+    }, 3000) // Duración de la animación de desvanecimiento
+    setFadeOutTimeout(timeout)
+  }
+
+
   return (
     <>
       <div className="d-flex" style={{ minHeight: '100vh' }}>
@@ -20,7 +64,7 @@ const AddProviders = () => {
           <h1 className="text-center fw-bold mb-5" style={{ color: '#791021' }}>
             ¿Que proveedor deseas agregar?
           </h1>
-          <form className="row">
+          <form className="row" onSubmit={handleSubmit}>
             <div className="mb-3 col-6">
               <label className="fw-semibold form-label">
                 Nombre de la empresa
