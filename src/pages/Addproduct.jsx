@@ -166,6 +166,15 @@ const ProductForm = () => {
                 min={1}
               />
             </div>
+            <div className="mb-3 col-8">
+              <label className="fw-semibold form-label">Proveedor</label>
+              <input
+                type="text"
+                className="shadow-sm form-control"
+                placeholder="Ingrese un proveedor"
+                min={1}
+              />
+            </div>
             {category === '3' && (
               <div className="mb-2 col-4">
                 <label className="fw-semibold form-label">Talla</label>

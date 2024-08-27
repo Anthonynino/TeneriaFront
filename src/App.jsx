@@ -9,6 +9,8 @@ import ProtectedRouter from './public/ProtectedRouter'
 import ProductsTable from './pages/ProductsTable'
 import CategoryPage from './pages/CategoryPage'
 import AddProviders from './pages/AddProviders'
+import OutputProducts from './pages/OutputProducts'
+
 
 function App() {
   return (
@@ -29,6 +31,7 @@ function App() {
                 element={<ProductsTable />}
               />
               <Route path="/category" element={<CategoryPage />} />
+              <Route path="/out-products" element={<OutputProducts/>} />
               <Route path="/add-provider" element={<AddProviders />} />
             </Route>
           </Routes>
