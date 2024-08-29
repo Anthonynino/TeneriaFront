@@ -5,12 +5,14 @@ import { getAllCategories } from '../api/categories'
 import { createProductRequest } from '../api/products'
 import { GoAlertFill } from 'react-icons/go'
 import { getAllSuppliers } from '../api/suppliers'
+import { FaCheck } from "react-icons/fa6";
 
 const ProductForm = () => {
   const { categoryId } = useParams()
   const [category, setCategory] = useState()
   const [getCategories, setGetCategories] = useState()
   const [showAlert, setShowAlert] = useState(false)
+  const [showASuccess, setShowSuccess] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
   const [fadeOutTimeout, setFadeOutTimeout] = useState(null)
   const [provider, setProvider] = useState()
@@ -53,6 +55,7 @@ const ProductForm = () => {
         categoryId,
         supplierId
       )
+      triggerSuccess('Se agrego correctamente')
     }
   }
 
@@ -64,6 +67,19 @@ const ProductForm = () => {
     // Configuramos el timeout para desvanecer la alerta
     const timeout = setTimeout(() => {
       setShowAlert(false)
+      setAlertMessage('')
+    }, 3000) // Duración de la animación de desvanecimiento
+    setFadeOutTimeout(timeout)
+  }
+
+  const triggerSuccess = (message) => {
+    setAlertMessage(message)
+    setShowSuccess(true)
+    // Si hay un timeout en proceso, lo limpiamos
+    if (fadeOutTimeout) clearTimeout(fadeOutTimeout)
+    // Configuramos el timeout para desvanecer la alerta
+    const timeout = setTimeout(() => {
+      setShowSuccess(false)
       setAlertMessage('')
     }, 3000) // Duración de la animación de desvanecimiento
     setFadeOutTimeout(timeout)
@@ -210,6 +226,20 @@ const ProductForm = () => {
           <div className="mb-2">
             <span style={{ marginRight: '0.5rem', fontSize: '1.5rem' }}>
               <GoAlertFill color="yellow" />
+            </span>
+            {alertMessage}
+          </div>
+        </div>
+      )}
+      {showASuccess && (
+        <div
+          className="alert position-fixed bottom-0 end-0 mb-3 me-3 text-white alert-animation"
+          style={{ background: '#28a745', zIndex: '100' }}
+          role="alert"
+        >
+          <div className="mb-2">
+            <span style={{ marginRight: '0.5rem', fontSize: '1.5rem' }}>
+              < FaCheck color="white" />
             </span>
             {alertMessage}
           </div>
