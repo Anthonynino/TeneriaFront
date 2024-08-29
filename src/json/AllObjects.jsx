@@ -11,6 +11,7 @@ import { GiSolderingIron } from 'react-icons/gi'
 import { GiLargePaintBrush } from 'react-icons/gi'
 import { GiNails } from 'react-icons/gi'
 import { LuLayoutDashboard } from "react-icons/lu";
+import { FaPlus } from "react-icons/fa";
 
 export const cards = [
   {
@@ -90,6 +91,18 @@ export const menuOption = [
   },
   {
     id: 3,
+    link: '/add-product',
+    icon: (
+      <FaPlus
+        className="mx-2"
+        style={{ top: '10px' }}
+        size={30}
+      />
+    ),
+    title: 'Agregar nuevo producto',
+  },
+  {
+    id: 4,
     link: '/homepage',
     icon: (
       <FaArrowRightLong
@@ -101,7 +114,7 @@ export const menuOption = [
     title: 'Realizar Ingreso',
   },
   {
-    id: 4,
+    id: 5,
     link: '/out-products',
     icon: (
       <FaArrowLeftLong
@@ -113,7 +126,7 @@ export const menuOption = [
     title: 'Realizar Salida',
   },
   {
-    id: 5,
+    id: 6,
     link: '/add-provider',
     icon: (
       <FaTruckArrowRight
@@ -125,7 +138,7 @@ export const menuOption = [
     title: 'Agregar proveedor',
   },
   {
-    id: 6,
+    id: 7,
     link: '/login',
     icon: (
       <ImExit
