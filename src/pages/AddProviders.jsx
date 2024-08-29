@@ -21,6 +21,7 @@ const AddProviders = () => {
     const rif = e.target[1].value
     const ubication = e.target[2].value
     
+    
     if (
       name === '' ||
       rif === '' ||
@@ -29,12 +30,13 @@ const AddProviders = () => {
     ) {
       triggerAlert('Los campos deben estar llenos')
     } else {
-      console.log({name, rif, ubication});
+      console.log({name, rif, ubication, selectedOption});
       
       await addSuppliersRequest(
         name,
         rif,
         ubication,
+        selectedOption
       )
     }
   }
