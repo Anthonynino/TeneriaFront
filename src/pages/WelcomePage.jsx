@@ -73,7 +73,7 @@ function WelcomePage() {
                       {w.title}
                     </h2>
                     <p
-                      className="fs-6 fw-bold"
+                      className=" fw-bold"
                       style={{ fontFamily: 'sans-serif' }}
                     >
                       {w.description}
@@ -86,7 +86,7 @@ function WelcomePage() {
                       width: 'auto',
                       objectFit: 'cover',
                     }}
-                    className="rounded-3 mt-3"
+                    className="rounded-3 mt-1"
                     alt={w.title}
                   />
                 </div>

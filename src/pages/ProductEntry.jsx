@@ -27,10 +27,10 @@ const ProductForm = () => {
     const quantityInt = parseInt(quantityProduct)
     const size = e.target[5].value
     if (
-      categoryId === '' &&
-      nameProduct === '' &&
-      codeProduct === '' &&
-      ubicationProduct === '' &&
+      categoryId === '' ||
+      nameProduct === '' ||
+      codeProduct === '' ||
+      ubicationProduct === '' ||
       quantityProduct === ''
     ) {
       triggerAlert('Los campos deben estar llenos')

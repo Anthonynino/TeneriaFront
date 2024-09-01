@@ -36,7 +36,7 @@ function Navbar() {
               }}
             >
               <div className="me-2">{opt.icon}</div>
-              <h4 className="mb-0">{opt.title}</h4>
+              <h5 className="mb-0">{opt.title}</h5>
             </Link>
           ))}
         </ul>

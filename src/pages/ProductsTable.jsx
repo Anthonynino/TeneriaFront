@@ -93,7 +93,7 @@ function ProductsTable() {
     <div className="d-flex" style={{minHeight:"100vh"}}>
       <Navbar />
       <div className="row my-auto mx-auto" style={{ width: '70%' }}>
-        <h1 className="text-center fw-bold mb-4" style={{ color: '#791021' }}>
+        <h1 className="text-center fw-bold mb-4 mt-5" style={{ color: '#791021' }}>
           {nameCategory}
         </h1>
         <Paper

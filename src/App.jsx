@@ -9,6 +9,7 @@ import ProtectedRouter from './public/ProtectedRouter'
 import ProductsTable from './pages/ProductsTable'
 import CategoryPage from './pages/CategoryPage'
 import AddProviders from './pages/AddProviders'
+import ProvidersTable from './pages/ProvidersTable'
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               />
               <Route path="/category" element={<CategoryPage />} />
               <Route path="/add-provider" element={<AddProviders />} />
+              <Route path="/providerstable" element={<ProvidersTable />} />
             </Route>
           </Routes>
         </BrowserRouter>
