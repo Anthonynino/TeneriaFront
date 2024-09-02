@@ -1,8 +1,6 @@
 import { MdCategory } from 'react-icons/md'
 import { HiDocumentReport } from 'react-icons/hi'
 import { ImExit } from 'react-icons/im'
-import { FaArrowRightLong } from 'react-icons/fa6'
-import { FaArrowLeftLong } from 'react-icons/fa6'
 import { FaTruckArrowRight } from "react-icons/fa6";
 import { IoBulbSharp } from 'react-icons/io5'
 import { FaHelmetSafety } from 'react-icons/fa6'
@@ -90,31 +88,7 @@ export const menuOption = [
   },
   {
     id: 3,
-    link: '/add-product',
-    icon: (
-      <FaArrowRightLong
-        className="mx-2"
-        style={{ top: '10px' }}
-        size={30}
-      />
-    ),
-    title: 'Realizar Ingreso',
-  },
-  {
-    id: 4,
-    link: '/homepage',
-    icon: (
-      <FaArrowLeftLong
-        className="mx-2"
-        style={{ top: '10px' }}
-        size={30}
-      />
-    ),
-    title: 'Realizar Salida',
-  },
-  {
-    id: 5,
-    link: '/add-provider',
+    link: '/providerstable',
     icon: (
       <FaTruckArrowRight
         className="mx-2"
@@ -122,10 +96,10 @@ export const menuOption = [
         size={30}
       />
     ),
-    title: 'Agregar proveedor',
+    title: 'Ver Proveedores',
   },
   {
-    id: 6,
+    id: 4,
     link: '/login',
     icon: (
       <ImExit

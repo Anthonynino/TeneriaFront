@@ -4,13 +4,15 @@ import { GoAlertFill } from "react-icons/go";
 import { addSupplier } from "../api/providers";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const AddProviders = () => {
+  const navigate = useNavigate()
   const [selectedOption, setSelectedOption] = useState("si"); // Estado para controlar la selección del botón de radio
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [fadeOutTimeout, setFadeOutTimeout] = useState(null);
-  const [modalSuccess, setModalSucces] = useState(false)
+  const [modalSuccess, setModalSucces] = useState(false);
   // Function to reset the form after submission
   const resetForm = () => {
     setSelectedOption("si"); // Reset radio button to default
@@ -37,7 +39,7 @@ const AddProviders = () => {
         selectedOption == "si" ? true : false
       );
       resetForm();
-      setModalSucces(true)
+      setModalSucces(true);
     }
   };
 
@@ -59,7 +61,7 @@ const AddProviders = () => {
       <div className="d-flex" style={{ minHeight: "100vh" }}>
         <Navbar />
         <div
-          className="w-50 row mt-5 h-50 mx-auto"
+          className="w-50 row mt-5 h-50 mx-auto "
           style={{ paddingTop: "4rem" }}
         >
           <h1 className="text-center fw-bold mb-5" style={{ color: "#791021" }}>
@@ -130,7 +132,14 @@ const AddProviders = () => {
             <div className="row mt-2">
               <div className="col-12 d-flex justify-content-end">
                 <button
-                  className="btn fw-semibold px-3 button-hover"
+                  className="btn fw-semibold px-5 button-hover mx-1"
+                  style={{ background: "#791021", color: "#ffff" }}
+                  onClick={() => navigate(-1)}
+                >
+                            Regresar
+                </button>
+                <button
+                  className="btn fw-semibold px-3 button-hover mx-1"
                   style={{ background: "#DAA520", color: "#ffff" }}
                   type="submit"
                 >

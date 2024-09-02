@@ -1,30 +1,19 @@
 import Navbar from "../Navbar";
 import { useEffect, useState } from "react";
 import { getAllQuantities } from "../api/dashboard";
-import { FaUsers, FaTruck, FaBox, FaChartBar } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaTruck, FaBox, FaChartBar } from "react-icons/fa";
 
 function Homepage() {
-  const [userNumber, setUserNumber] = useState(0);
   const [productNumber, setProductNumber] = useState(0);
   const [supplierNumber, setSupplierNumber] = useState(0);
 
   const cardHome = [
-    {
-      id: 1,
-      title: "Usuarios",
-      icon: <FaUsers size={48} />,
-      color: "#2F4F4F",
-      total: userNumber,
-      link: "/providerstable",
-    },
     {
       id: 2,
       title: "Proveedores",
       icon: <FaTruck size={48} />,
       color: " #999999",
       total: supplierNumber,
-      link: "/providerstable",
     },
     {
       id: 3,
@@ -32,7 +21,6 @@ function Homepage() {
       icon: <FaBox size={48} />,
       color: "#801817",
       total: productNumber,
-      link: "/providerstable",
     },
     {
       id: 4,
@@ -40,14 +28,12 @@ function Homepage() {
       icon: <FaChartBar size={48} />,
       color: "#4E3D2E",
       total: 0,
-      link: "/providerstable",
     },
   ];
 
   useEffect(() => {
     const fetchData = async () => {
       const getAllValues = await getAllQuantities();
-      setUserNumber(getAllValues.data.userQuantity);
       setProductNumber(getAllValues.data.productQuantity);
       setSupplierNumber(getAllValues.data.supplierQuantity);
     };
@@ -69,10 +55,9 @@ function Homepage() {
                 key={card.id}
                 className="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex flex-column justify-content-center mx-auto"
               >
-                <Link
-                  to={card.link}
+                <div
                   style={{ background: card.color }}
-                  className="no-underline text-white p-3 my-2 rounded-4 shadow card-scale"
+                  className="no-underline text-white p-3 my-2 rounded-4 shadow"
                 >
                   <div
                     className="text-center"
@@ -84,7 +69,7 @@ function Homepage() {
                   <p className="text-center">
                     <b style={{ fontSize: "24px" }}>{card.total}</b>
                   </p>
-                </Link>
+                </div>
               </div>
             );
           })}

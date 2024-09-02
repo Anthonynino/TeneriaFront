@@ -9,22 +9,26 @@ import { TablePagination } from "@mui/material";
 import { useEffect, useState } from "react";
 import Navbar from "../Navbar";
 import { getAllSuppliers } from "../api/providers";
+import { FaPlus } from 'react-icons/fa'
+import { useNavigate } from "react-router-dom";
 
 function ProvidersTable() {
+  const navigate = useNavigate()
   const [page, setPage] = useState(0); // Encargado de manejar la paginación de la tabla
   const [rowsPerPage, setRowsPerPage] = useState(10); // Calcula las filas por página
   const [rowSuppliers, setRowSuppliers] = useState([]); // Guarda las filas que se van agregando a la tabla
 
   //Columnas predefinidas para la tabla
   const columnSuppliers = [
+    { id: 'add', label: 'Agregar', minWidth: 20 },
     { id: "name", label: "Nombre", minWidth: 70 },
     { id: "rif", label: "RIF", minWidth: 70 },
     { id: "location", label: "Ubicación", minWidth: 70 },
   ];
 
-  const createDataSupplier = (location, rif, name) => {
+  const createDataSupplier = (location, rif, name, add) => {
     //define los datos que mostrarán en pantalla
-    return { location, rif, name };
+    return { location, rif, name, add };
   };
 
   const handleChangePage = (event, newPage) => {
@@ -91,6 +95,9 @@ function ProvidersTable() {
                         color: "#fff",
                       }}
                     >
+                       {column.label == 'Agregar' && (
+                        <FaPlus className="text-white mx-2" type='button' size={20} onClick={() => navigate(`/add-provider`)} />
+                      )}
                       {column.label}
                     </TableCell>
                   ))}
