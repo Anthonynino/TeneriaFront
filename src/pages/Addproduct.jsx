@@ -38,7 +38,6 @@ const ProductForm = () => {
     const size = e.target[6].value
     if (
       categoryId === '' ||
-      supplierId === '' ||
       nameProduct === '' ||
       codeProduct === '' ||
       ubicationProduct === '' ||

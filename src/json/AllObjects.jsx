@@ -1,8 +1,6 @@
 import { MdCategory } from 'react-icons/md'
 import { HiDocumentReport } from 'react-icons/hi'
 import { ImExit } from 'react-icons/im'
-import { FaArrowRightLong } from 'react-icons/fa6'
-import { FaArrowLeftLong } from 'react-icons/fa6'
 import { FaTruckArrowRight } from "react-icons/fa6";
 import { IoBulbSharp } from 'react-icons/io5'
 import { FaHelmetSafety } from 'react-icons/fa6'
@@ -11,7 +9,6 @@ import { GiSolderingIron } from 'react-icons/gi'
 import { GiLargePaintBrush } from 'react-icons/gi'
 import { GiNails } from 'react-icons/gi'
 import { LuLayoutDashboard } from "react-icons/lu";
-import { FaPlus } from "react-icons/fa";
 
 export const cards = [
   {
@@ -91,43 +88,7 @@ export const menuOption = [
   },
   {
     id: 3,
-    link: '/add-product',
-    icon: (
-      <FaPlus
-        className="mx-2"
-        style={{ top: '10px' }}
-        size={30}
-      />
-    ),
-    title: 'Agregar nuevo producto',
-  },
-  {
-    id: 4,
-    link: '/homepage',
-    icon: (
-      <FaArrowRightLong
-        className="mx-2"
-        style={{ top: '10px' }}
-        size={30}
-      />
-    ),
-    title: 'Realizar Ingreso',
-  },
-  {
-    id: 5,
-    link: '/out-products',
-    icon: (
-      <FaArrowLeftLong
-        className="mx-2"
-        style={{ top: '10px' }}
-        size={30}
-      />
-    ),
-    title: 'Realizar Salida',
-  },
-  {
-    id: 6,
-    link: '/add-provider',
+    link: '/providerstable',
     icon: (
       <FaTruckArrowRight
         className="mx-2"
@@ -135,10 +96,10 @@ export const menuOption = [
         size={30}
       />
     ),
-    title: 'Agregar proveedor',
+    title: 'Ver Proveedores',
   },
   {
-    id: 7,
+    id: 4,
     link: '/login',
     icon: (
       <ImExit
