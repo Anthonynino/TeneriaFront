@@ -48,6 +48,10 @@
   animation: fade-in-out 3s ease-in-out;
 }
 
+.no-select { 
+  user-select: none;
+}
+
 .background-fallback {
   background: url('../assets/Leathers.jpg') no-repeat center center fixed;
   background-size: cover;
