@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
   // Estado para controlar el estado de carga.
   const [loading, setLoading] = useState(true)
 
-  // Efecto para verificar si el usuario está autenticado cuando se carga la página.
+  // Verificar si el usuario está autenticado cuando se carga la página.
   useEffect(() => {
     const checkLogin = async () => {
       const cookies = Cookies.get()
@@ -49,19 +49,32 @@ export const AuthProvider = ({ children }) => {
           return
         }
 
-        // Obtener el usuario desde localStorage si está disponible.
+        // Verificar si hay un usuario guardado en el localStorage
         const userFromStorage = localStorage.getItem('user')
         if (userFromStorage) {
           setUser(JSON.parse(userFromStorage))
           setIsAuthenticated(true)
+        } else {
+          // Si no hay usuario en localStorage, guardar el usuario desde la respuesta del servidor
+          setUser(res.data)
+          localStorage.setItem(
+            'user',
+            JSON.stringify({
+              id: res.data.id,
+              username: res.data.username,
+              rolId: res.data.rolId,
+            })
+          )
         }
 
+        setIsAuthenticated(true)
         setLoading(false)
       } catch (error) {
         setIsAuthenticated(false)
         setLoading(false)
       }
     }
+
     checkLogin()
   }, [])
 
@@ -73,7 +86,14 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true)
 
       // Guardar el usuario en localStorage para persistencia.
-      localStorage.setItem('user', JSON.stringify(res.data))
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          id: res.data.id,
+          username: res.data.username,
+          rolId: res.data.rolId,
+        })
+      )
     } catch (error) {
       setErrors(error.response.data)
     }

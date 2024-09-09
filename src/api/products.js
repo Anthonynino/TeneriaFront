@@ -4,10 +4,6 @@ export const getProductsRequest = (categoryId) => {
   return axios.get(`/products/${categoryId}`)
 }
 
-export const getProductRequest = (id) => {
-  return axios.get(`/products/${id}`)
-}
-
 export const createProductRequest = (
   name,
   code,
@@ -17,13 +13,27 @@ export const createProductRequest = (
   categoryId,
   supplierId
 ) => {
-  return axios.post(`/products`, {
+  return axios.post(`/createProduct`, {
     name,
     code,
     ubication,
     quantity,
     size,
     categoryId,
-    supplierId
+    supplierId,
+  })
+}
+
+export const deleteProduct = (id) => {
+  return axios.delete(`/products/${id}`)
+}
+
+export const updateStock = (updateData) => {
+  return axios.post(`/updateProduct`, {
+    productId: updateData.productId,
+    quantity: updateData.count,
+    userId: updateData.userId,
+    departmentId: updateData.departmentId,
+    movementType: updateData.movementType,
   })
 }

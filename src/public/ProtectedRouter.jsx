@@ -1,11 +1,10 @@
-// src/components/ProtectedRouter.js
 import { useState, useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import LoadingScreen from "./LoadingScreen";
 
 function ProtectedRouter() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const [showLoading, setShowLoading] = useState(true);
 
   useEffect(() => {
@@ -13,18 +12,17 @@ function ProtectedRouter() {
       setShowLoading(false);
     }, 1500);
 
-    // Limpiar el temporizador si el componente se desmonta antes de que se complete el tiempo de espera
     return () => clearTimeout(timeoutId);
   }, []);
 
-  if (!isAuthenticated) {
-    // Si no está autenticado, redirige a la página de inicio de sesión
-    return <Navigate to="/login" />;
+  // Si la autenticación aún está cargando, mostramos la pantalla de carga
+  if (loading || showLoading) {
+    return <LoadingScreen />;
   }
 
-  if (showLoading) {
-    // Si la autenticación aún se está cargando, renderiza un indicador de carga
-    return <LoadingScreen />;
+  // Si no está autenticado, redirige a la página de login
+  if (!isAuthenticated && !loading) {
+    return <Navigate to="/login" />;
   }
 
   // Si está autenticado, renderiza el componente solicitado

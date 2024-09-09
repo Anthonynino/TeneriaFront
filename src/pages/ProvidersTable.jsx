@@ -11,6 +11,7 @@ import Navbar from "../Navbar";
 import { getAllSuppliers } from "../api/providers";
 import { FaPlus } from 'react-icons/fa'
 import { useNavigate } from "react-router-dom";
+import { FaTrashAlt, FaEdit } from 'react-icons/fa'
 
 function ProvidersTable() {
   const navigate = useNavigate()
@@ -41,17 +42,46 @@ function ProvidersTable() {
     setPage(0);
   };
 
+  const handleEditSupplier = () => {
+    console.log()
+  }
+
+  const handleDeleteProduct = () => {
+    console.log()
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await getAllSuppliers();
 
-        const processedDataSuppliers = res.data.map((supp) => {
+        const processedDataSuppliers = res.data.map((supp, index) => {
           // Procesar cada dato para extraer la información deseada
+          const icons = (
+            <>
+              {/* Ícono de editar */}
+              <FaEdit
+                key={`editIcon ${index}`}
+                className="mx-2"
+                size={20}
+                type="button"
+                onClick={() => handleEditSupplier(index)} // Maneja la acción de edición
+              />
+        
+              {/* Ícono de eliminar */}
+              <FaTrashAlt
+                key={`prodTrash ${index}`}
+                className="mx-2"
+                size={20}
+                type="button"
+                onClick={() => handleDeleteProduct(index)} // Maneja la acción de eliminación
+              />
+            </>
+          );
           const name = supp.name;
           const rif = supp.rif;
           const location = supp.location;
-          return createDataSupplier(location, rif, name);
+          return createDataSupplier(location, rif, name, icons);
         });
 
         setRowSuppliers(processedDataSuppliers);
@@ -64,12 +94,12 @@ function ProvidersTable() {
   }, []);
 
   return (
-    <div className="d-flex" style={{ minHeight: "100vh" }}>
+    <div className="d-flex" style={{ minHeight: '100vh' }}>
       <Navbar />
-      <div className="row my-auto mx-auto" style={{ width: "70%" }}>
+      <div className="my-auto mx-auto" style={{ width: '70%' }}>
         <h1
-          className="text-center fw-bold mb-4 mt-5"
-          style={{ color: "#791021" }}
+          className="text-center fw-bold mt-5 pt-4"
+          style={{ color: '#791021' }}
         >
           Proveedores
         </h1>
