@@ -1,21 +1,21 @@
-import Paper from '@mui/material/Paper'
-import Table from '@mui/material/Table'
+import { useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { getProductsRequest, deleteProduct } from '../api/products'
+import SuccessfulOperation from './SuccessfulOperation'
+import UpdateStock from './UpdateStock'
+import Navbar from '../Navbar'
+import { FaTrashAlt, FaEdit } from 'react-icons/fa'
+import { ImExit, ImEnter } from 'react-icons/im'
+import { FaPlus } from 'react-icons/fa'
+import TableContainer from '@mui/material/TableContainer'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
 import { TablePagination } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { FaPlus } from 'react-icons/fa'
-import { FaTrashAlt, FaEdit } from 'react-icons/fa'
-import { useNavigate } from 'react-router-dom'
-import Navbar from '../Navbar'
-import { getProductsRequest, deleteProduct } from '../api/products'
-import { ImExit, ImEnter } from 'react-icons/im'
-import UpdateStock from './UpdateStock'
-import SuccessfulOperation from './SuccessfulOperation'
+import TableRow from '@mui/material/TableRow'
+import Paper from '@mui/material/Paper'
+import Table from '@mui/material/Table'
 
 function ProductsTable() {
   const navigate = useNavigate() // Hook para navegar entre páginas
@@ -27,10 +27,11 @@ function ProductsTable() {
   const [arrayProduct, setArrayProduct] = useState([]) // Guardar la data de los productos
   const [modalSuccess, setModalSuccess] = useState(false) //Modal para mostrar que la acción se realizó exitosamente
   const [isExit, setIsExit] = useState(false) // Estado que controla si es una salida y si no con esto evaluamos que sera una entrada
+  const [rolId, setRolId] = useState(""); // Se guarda el id del rol desde el localStorage
 
   //Columnas predefinidas para la tabla
   const columnProducts = [
-    { id: 'add', label: 'Agregar', minWidth: 20 },
+    { id: 'add', label: rolId == '1' && 'Agregar', minWidth: 20 },
     { id: 'name', label: 'Nombre', minWidth: 70 },
     { id: 'quantity', label: 'Cantidad', minWidth: 70 },
     { id: 'code', label: 'Código', minWidth: 70 },
@@ -118,7 +119,7 @@ function ProductsTable() {
           prod.code,
           prod.quantity,
           prod.name,
-          icons
+          rolId == '1' ? icons : ""
         )
       })
 
@@ -131,6 +132,11 @@ function ProductsTable() {
   useEffect(() => {
     fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        //Se extrae los datos guardados del localStorage y se extrea su rolId
+        const storedUser = localStorage.getItem("user");
+        const userParsed = JSON.parse(storedUser);
+        setRolId(userParsed.rolId);
   }, [])
 
   return (
@@ -138,12 +144,13 @@ function ProductsTable() {
       <Navbar />
       <div className="my-auto mx-auto" style={{ width: '70%' }}>
         <h1
-          className="text-center fw-bold mt-5 pt-4"
+          className="text-center fw-bold mt-5 pt-4 mb-3"
           style={{ color: '#791021' }}
         >
           {nameCategory}
         </h1>
-        <div className="mt-3 d-flex justify-content-center mb-4">
+        {rolId == '1' && (
+        <div className="d-flex justify-content-center mb-4">
           <button
             className="btn button-submit text-white mx-2"
             type="button"
@@ -169,6 +176,7 @@ function ProductsTable() {
             </span>
           </button>
         </div>
+        )}
         <Paper
           sx={{
             width: '95%',
