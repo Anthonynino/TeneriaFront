@@ -3,7 +3,6 @@ import { Modal } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { useState, useEffect } from 'react'
 import { updateStock } from '../api/products'
-import SuccessfulOperation from './SuccessfulOperation'
 import { getAllDepartments } from '../api/departments'
 
 function UpdateStock({
@@ -11,34 +10,39 @@ function UpdateStock({
   handleCloseUpdateStock, // Función usada para cerrar este modal
   productsValues, // Data de los productos para el select
   isExit, // Recibimos la variable que indica si es salida o entrada
-  fetchProductTable, //Funcion encargada de recargar la tabla de una vez se actualice el stock de los productos
+  fetchProductTable, // Función encargada de recargar la tabla de una vez se actualice el stock de los productos
+  setShowModal, // Estado para abrir el modal de error o de éxito
+  setModalMessage, // Estado para enviar un mensaje al modal
+  setModalTitle, // Enviar el título si es error, etc.
+  setIsSuccess, // Indicar que si fue un error o fue un éxito
 }) {
   const [countPlus, setCountPlus] = useState(0) // Estado encargado de almacenar el valor de la cantidad
   const [selectedProduct, setSelectedProduct] = useState('') // Estado para manejar la selección del producto
   const [selectedDepartment, setSelectedDepartment] = useState('')
-  const [user, setUser] = useState() //Estado para guardar el valor del localstorage del usuario
-  const [modalSuccess, setModalSuccess] = useState(false) //Modal para mostrar que la acción se realizó exitosamente
-  const [arrayDepartments, setArrayDepartments] = useState([]) //Guardar la data de los departamentos
+  const [user, setUser] = useState() // Estado para guardar el valor del localstorage del usuario
+  const [arrayDepartments, setArrayDepartments] = useState([]) // Guardar la data de los departamentos
 
-  // Cuando el modal se cierra, restablece los estados
   useEffect(() => {
-    const fecthDepartments = async () => {
+    const fetchDepartments = async () => {
       // Llamar el servicio para obtener los departamentos
       const data = await getAllDepartments()
       setArrayDepartments(data.data)
     }
+
     if (!modalUpdateStock) {
       setCountPlus(0)
       setSelectedProduct('')
       setSelectedDepartment('')
     }
+
     // Recupera la información del usuario desde localStorage
     const storedUser = localStorage.getItem('user')
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser)
       setUser(parsedUser)
     }
-    fecthDepartments()
+
+    fetchDepartments()
   }, [modalUpdateStock])
 
   // Maneja el cambio en el select de los productos
@@ -83,7 +87,11 @@ function UpdateStock({
       !user ||
       (isExit && !selectedDepartment)
     ) {
-      alert('Por favor, complete todos los campos requeridos.')
+      handleCloseUpdateStock()
+      setModalTitle('Error')
+      setModalMessage('Por favor, complete todos los campos requeridos.')
+      setIsSuccess(false)
+      setShowModal(true)
       return // Detiene la ejecución si falta algún campo
     }
 
@@ -102,12 +110,22 @@ function UpdateStock({
 
       // Verifica que la respuesta sea exitosa
       if (response.status === 200) {
-        setModalSuccess(true)
+        setModalTitle('Éxito')
+        setModalMessage('El stock se actualizó correctamente.')
+        setIsSuccess(true)
+        setShowModal(true)
         fetchProductTable()
         handleCloseUpdateStock() // Cierra el modal después de procesar
       }
     } catch (error) {
       console.error('Error al actualizar el stock:', error)
+      setModalTitle('Error')
+      setModalMessage(
+        'No hay suficiente stock disponible. Por favor, intente de nuevo.'
+      )
+      setIsSuccess(false)
+      setShowModal(true)
+      handleCloseUpdateStock() // Cierra el modal después de procesar
     }
   }
 
@@ -211,11 +229,6 @@ function UpdateStock({
           </div>
         </div>
       </Modal>
-      {/* Componente para mostrar un modal con operacion exitosa */}
-      <SuccessfulOperation
-        modalSuccess={modalSuccess}
-        handleCloseSuccess={() => setModalSuccess(false)}
-      />
     </>
   )
 }
@@ -227,6 +240,10 @@ UpdateStock.propTypes = {
   arrayDepartments: PropTypes.array,
   isExit: PropTypes.bool,
   fetchProductTable: PropTypes.func,
+  setShowModal: PropTypes.func.isRequired,
+  setModalMessage: PropTypes.func.isRequired,
+  setModalTitle: PropTypes.func.isRequired,
+  setIsSuccess: PropTypes.func.isRequired,
 }
 
 export default UpdateStock
