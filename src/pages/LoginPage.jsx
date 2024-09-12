@@ -115,8 +115,8 @@ function LoginPage() {
               </button>
               <div className="mt-3">
                 <h6 className="text-white">Credenciales de Invitado</h6>
-                <span className="text-white me-5">Usuario: Invitado</span>
-                <span className="text-white ms-4">Contraseña: SoyHomo</span>
+                <span className="text-white me-5">Usuario: invitado</span>
+                <span className="text-white ms-3">Contraseña: Invitado2024</span>
               </div>
             </form>
           </div>
