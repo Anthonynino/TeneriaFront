@@ -1,5 +1,5 @@
-import { IoMdCheckmarkCircleOutline } from 'react-icons/io'
-import { GoAlertFill } from 'react-icons/go'
+import { AiOutlineCheckCircle } from 'react-icons/ai';
+import { VscError } from "react-icons/vsc";
 import { Modal } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
@@ -9,15 +9,15 @@ function OperationModal({ showModal, handleClose, isSuccess, message }) {
       <div className="p-5 text-center fonts-letter rounded-1">
         <div className="d-flex flex-column">
           {isSuccess ? (
-            <IoMdCheckmarkCircleOutline
+            <AiOutlineCheckCircle
               className="mx-auto mb-1"
-              size={140}
+              size={160}
               style={{ color: '#DAA520' }} // Color para éxito
             />
           ) : (
-            <GoAlertFill
+            <VscError
               className="mx-auto mb-1"
-              size={140}
+              size={160}
               style={{ color: '#791021' }} // Color para error
             />
           )}

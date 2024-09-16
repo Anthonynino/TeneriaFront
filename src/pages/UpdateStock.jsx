@@ -63,19 +63,8 @@ function UpdateStock({
       return
     }
 
-    if (isExit) {
-      // Si es salida, siempre negativo, no permitir valores positivos
-      if (value > 0) {
-        value = 0
-      }
-    } else {
-      // Si es entrada, siempre positivo, no permitir valores menores que 1
-      if (value < 1) {
-        value = 1
-      }
-    }
-
-    setCountPlus(value) // Actualizamos el estado
+    // Almacenamos el valor tal como se introdujo, positivo o negativo
+    setCountPlus(value)
   }
 
   // Función encargada de actualizar el stock de los productos
@@ -95,11 +84,21 @@ function UpdateStock({
       return // Detiene la ejecución si falta algún campo
     }
 
+    // Validación para asegurarse de que la cantidad sea mayor a 0
+    if (countPlus === 0) {
+      setModalTitle('Error')
+      setModalMessage('La cantidad a ingresar o retirar debe ser mayor a 0.')
+      setIsSuccess(false)
+      setShowModal(true)
+      handleCloseUpdateStock()
+      return // Detiene la ejecución si la cantidad es 0
+    }
+
     try {
-      // Lógica para aceptar el cambio
+      // Lógica para aceptar el cambio, si es salida, asegurarse de que sea negativo
       const updateData = {
         productId: selectedProduct,
-        count: countPlus,
+        count: isExit ? -Math.abs(countPlus) : countPlus, // Coloca el valor negativo si es salida
         userId: user.id,
         departmentId: isExit ? selectedDepartment : null,
         movementType: isExit ? 'Salida' : 'Entrada',
@@ -120,12 +119,10 @@ function UpdateStock({
     } catch (error) {
       console.error('Error al actualizar el stock:', error)
       setModalTitle('Error')
-      setModalMessage(
-        'No hay suficiente stock disponible. Por favor, intente de nuevo.'
-      )
+      setModalMessage(error.response?.data?.message || 'Error desconocido')
       setIsSuccess(false)
       setShowModal(true)
-      handleCloseUpdateStock() // Cierra el modal después de procesar
+      handleCloseUpdateStock()
     }
   }
 
@@ -202,8 +199,8 @@ function UpdateStock({
               type="number"
               className="form-control border border-secondary rounded py-1"
               style={{ width: '70px' }}
-              min={isExit ? -Infinity : 1} // Permitimos decrementar en salida, pero no en entrada
-              value={isExit ? countPlus : Math.abs(countPlus)} // Si es salida, muestra el valor negativo, si es entrada, positivo
+              min={0}
+              value={countPlus}
               onChange={handleChangeCount}
             />
           </div>

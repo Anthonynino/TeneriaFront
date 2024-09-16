@@ -40,11 +40,13 @@ function ProductsTable() {
     { id: 'quantity', label: 'Cantidad', minWidth: 70 },
     { id: 'code', label: 'Código', minWidth: 70 },
     { id: 'ubication', label: 'Ubicación', minWidth: 70 },
-    { id: 'size', label: 'Tamaño', minWidth: 70 },
+    ...(categoryId == '3' || categoryId == '6'
+      ? [{ id: 'size', label: 'Tamaño', minWidth: 70 }]
+      : []),
   ]
-
+  // Actualización de la función createDataProducts
   const createDataProducts = (size, ubication, code, quantity, name, add) => {
-    //define los datos que mostrarán en pantalla
+    // define los datos que mostrarán en pantalla
     return { size, ubication, code, quantity, name, add }
   }
 
@@ -68,9 +70,12 @@ function ProductsTable() {
 
       // Verifica que la respuesta sea exitosa
       if (response.status === 200) {
-        /*      setModalSuccess(true) */
-        // Refetch products to update the table after deleting a product
-        /*     fetchData() */
+        setShowModal(true)
+        setModalTitle('Éxito')
+        setModalMessage('¡El producto fue eliminado exitosamente!')
+        setIsSuccess(true)
+        // Refrescar la tabla de los productos despues de eliminar alguno
+        fetchData()
       } else {
         console.error('Error al eliminar el producto:', response.data.message)
       }
@@ -96,7 +101,7 @@ function ProductsTable() {
   // Función para obtener los datos de los productos y departamentos
   const fetchData = async () => {
     try {
-      // Llamar al servicio para obtener productos por categoriaId
+      // Llamar al servicio para obtener productos por categoryId
       const res = await getProductsRequest(categoryId)
       setArrayProduct(res.data)
 
@@ -127,19 +132,19 @@ function ProductsTable() {
                 size={20}
                 type="button"
               />
-              <Tooltip title="Eliminable solo cuando el stock esté en 0">
-                <spam>
+              <Tooltip title="Este producto puede ser eliminado cuando el stock esté en 0">
+                <span>
                   <FaTrashAlt
                     key={`prodTrash ${index}`}
                     className="mx-2 text-secondary opacity-50 no-select"
                     size={20}
                   />
-                </spam>
+                </span>
               </Tooltip>
             </>
           )
         return createDataProducts(
-          prod.size,
+          categoryId === '3' || categoryId === '6' ? prod.size : '',
           prod.ubication,
           prod.code,
           prod.quantity,

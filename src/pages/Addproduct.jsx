@@ -23,6 +23,7 @@ const ProductForm = () => {
   const [modalMessage, setModalMessage] = useState('')
   const [modalTitle, setModalTitle] = useState('')
   const [isSuccess, setIsSuccess] = useState(true)
+  const [user, setUser] = useState()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -37,25 +38,36 @@ const ProductForm = () => {
     ) {
       triggerModal('Error', 'Los campos deben estar llenos', false) // Error con título personalizado
     } else {
-      await createProductRequest(
-        nameProduct,
-        codeProduct,
-        ubicationProduct,
-        quantityInt,
-        size,
-        category,
-        provider
-      )
-      triggerModal('¡Éxito!', '¡Producto agregado correctamente!', true) // Éxito con título personalizado
+      try {
+        // Intenta crear el producto y espera la respuesta
+        await createProductRequest(
+          nameProduct,
+          codeProduct,
+          ubicationProduct,
+          quantityInt,
+          size,
+          category,
+          provider,
+          user.id
+        )
 
-      // Limpiar los campos después del éxito
-      setCategory('')
-      setProvider('')
-      setNameProduct('')
-      setCodeProduct('')
-      setUbicationProduct('')
-      setQuantityProduct('')
-      setSize('')
+        // Si la creación es exitosa, muestra el mensaje de éxito
+        triggerModal('¡Éxito!', '¡Producto agregado correctamente!', true)
+
+        // Limpiar los campos después del éxito
+        setCategory('')
+        setProvider('')
+        setNameProduct('')
+        setCodeProduct('')
+        setUbicationProduct('')
+        setQuantityProduct('')
+        setSize('')
+      } catch (error) {
+        // Si ocurre un error, muestra el mensaje de error
+        const errorMessage =
+          error.response?.data?.message || 'Error desconocido'
+        triggerModal('Error', errorMessage, false) // Error con título personalizado
+      }
     }
   }
 
@@ -76,6 +88,12 @@ const ProductForm = () => {
       setGetSuppliers(suppliersRes)
     }
     fetchData()
+    // Recupera la información del usuario desde localStorage
+    const storedUser = localStorage.getItem('user')
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser)
+      setUser(parsedUser)
+    }
   }, [])
 
   return (
