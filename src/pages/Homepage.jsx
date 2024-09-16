@@ -1,53 +1,61 @@
-import Navbar from "../Navbar";
-import { useEffect, useState } from "react";
-import { getAllQuantities } from "../api/dashboard";
-import { FaTruck, FaBox, FaChartBar } from "react-icons/fa";
+import Navbar from '../Navbar'
+import { useEffect, useState } from 'react'
+import { getAllQuantities } from '../api/dashboard'
+import { FaTruck, FaBox, FaChartBar } from 'react-icons/fa'
 
 function Homepage() {
-  const [productNumber, setProductNumber] = useState(0);
-  const [supplierNumber, setSupplierNumber] = useState(0);
+  const [productNumber, setProductNumber] = useState(0)
+  const [supplierNumber, setSupplierNumber] = useState(0)
+  const [user, setUser] = useState() // Estado para guardar el valor del localstorage del usuario
 
   const cardHome = [
     {
       id: 2,
-      title: "Proveedores",
+      title: 'Proveedores',
       icon: <FaTruck size={48} />,
-      color: " #999999",
+      color: ' #999999',
       total: supplierNumber,
     },
     {
       id: 3,
-      title: "Productos",
+      title: 'Productos',
       icon: <FaBox size={48} />,
-      color: "#801817",
+      color: '#801817',
       total: productNumber,
     },
     {
       id: 4,
-      title: "Reportes",
+      title: 'Reportes',
       icon: <FaChartBar size={48} />,
-      color: "#4E3D2E",
+      color: '#4E3D2E',
       total: 0,
     },
-  ];
+  ]
 
   useEffect(() => {
     const fetchData = async () => {
-      const getAllValues = await getAllQuantities();
-      setProductNumber(getAllValues.data.productQuantity);
-      setSupplierNumber(getAllValues.data.supplierQuantity);
-    };
-    fetchData();
-  }, []);
+      const getAllValues = await getAllQuantities()
+      setProductNumber(getAllValues.data.productQuantity)
+      setSupplierNumber(getAllValues.data.supplierQuantity)
+    }
+    fetchData()
+
+    // Recupera la información del usuario desde localStorage
+    const storedUser = localStorage.getItem('user')
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser)
+      setUser(parsedUser)
+    }
+  }, [])
 
   return (
     <>
       <br />
-      <div className="d-flex" style={{ minHeight: "100vh" }}>
+      <div className="d-flex" style={{ minHeight: '100vh' }}>
         <Navbar />
         <div className="w-50 row my-auto mx-auto">
-          <h1 className="text-center fw-bold" style={{ color: "#791021" }}>
-            Panel de Administración
+          <h1 className="text-center fw-bold" style={{ color: '#791021' }}>
+            {user?.rolId === "1" ? 'Panel de Administración' : 'Panel de Información'}
           </h1>
           {cardHome.map((card) => {
             return (
@@ -61,22 +69,22 @@ function Homepage() {
                 >
                   <div
                     className="text-center"
-                    style={{ filter: "opacity(0.4)" }}
+                    style={{ filter: 'opacity(0.4)' }}
                   >
                     {card.icon}
                   </div>
                   <h3 className="text-center">{card.title}</h3>
                   <p className="text-center">
-                    <b style={{ fontSize: "24px" }}>{card.total}</b>
+                    <b style={{ fontSize: '24px' }}>{card.total}</b>
                   </p>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default Homepage;
+export default Homepage

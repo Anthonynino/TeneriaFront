@@ -3,86 +3,82 @@ import Navbar from '../Navbar'
 import { useParams } from 'react-router-dom'
 import { getAllCategories } from '../api/categories'
 import { createProductRequest } from '../api/products'
-import { GoAlertFill } from 'react-icons/go'
 import { getAllSuppliers } from '../api/suppliers'
-import { FaCheck } from "react-icons/fa6";
+import OperationModal from './SuccessfulOperation'
+import { useNavigate } from 'react-router-dom'
 
 const ProductForm = () => {
+  const navigate = useNavigate()
   const { categoryId } = useParams()
-  const [category, setCategory] = useState()
+  const [category, setCategory] = useState(categoryId || '')
+  const [provider, setProvider] = useState('')
+  const [nameProduct, setNameProduct] = useState('')
+  const [codeProduct, setCodeProduct] = useState('')
+  const [ubicationProduct, setUbicationProduct] = useState('')
+  const [quantityProduct, setQuantityProduct] = useState('')
+  const [size, setSize] = useState('')
   const [getCategories, setGetCategories] = useState()
-  const [showAlert, setShowAlert] = useState(false)
-  const [showASuccess, setShowSuccess] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [fadeOutTimeout, setFadeOutTimeout] = useState(null)
-  const [provider, setProvider] = useState()
   const [getSuppliers, setGetSuppliers] = useState()
-
-  const handleCategory = (event) => {
-    setCategory(event.target.value)
-  }
-
-  const handleProvider = (event) => {
-    setProvider(event.target.value)
-  }
+  const [showModal, setShowModal] = useState(false)
+  const [modalMessage, setModalMessage] = useState('')
+  const [modalTitle, setModalTitle] = useState('')
+  const [isSuccess, setIsSuccess] = useState(true)
+  const [user, setUser] = useState()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const categoryId = e.target[0].value
-    const supplierId = e.target[1].value
-    const nameProduct = e.target[2].value
-    const codeProduct = e.target[3].value
-    const ubicationProduct = e.target[4].value
-    const quantityProduct = e.target[5].value
     const quantityInt = parseInt(quantityProduct)
-    const size = e.target[6].value
+
     if (
-      categoryId === '' ||
-      nameProduct === '' ||
-      codeProduct === '' ||
-      ubicationProduct === '' ||
-      quantityProduct === ''
+      !category ||
+      !nameProduct ||
+      !codeProduct ||
+      !ubicationProduct ||
+      !quantityProduct
     ) {
-      triggerAlert('Los campos deben estar llenos')
+      triggerModal('Error', 'Los campos deben estar llenos', false) // Error con título personalizado
     } else {
-      await createProductRequest(
-        nameProduct,
-        codeProduct,
-        ubicationProduct,
-        quantityInt,
-        size,
-        categoryId,
-        supplierId
-      )
-      triggerSuccess('Se agrego correctamente')
+      try {
+        // Intenta crear el producto y espera la respuesta
+        await createProductRequest(
+          nameProduct,
+          codeProduct,
+          ubicationProduct,
+          quantityInt,
+          size,
+          category,
+          provider,
+          user.id
+        )
+
+        // Si la creación es exitosa, muestra el mensaje de éxito
+        triggerModal('¡Éxito!', '¡Producto agregado correctamente!', true)
+
+        // Limpiar los campos después del éxito
+        setCategory('')
+        setProvider('')
+        setNameProduct('')
+        setCodeProduct('')
+        setUbicationProduct('')
+        setQuantityProduct('')
+        setSize('')
+      } catch (error) {
+        // Si ocurre un error, muestra el mensaje de error
+        const errorMessage =
+          error.response?.data?.message || 'Error desconocido'
+        triggerModal('Error', errorMessage, false) // Error con título personalizado
+      }
     }
   }
 
-  const triggerAlert = (message) => {
-    setAlertMessage(message)
-    setShowAlert(true)
-    // Si hay un timeout en proceso, lo limpiamos
-    if (fadeOutTimeout) clearTimeout(fadeOutTimeout)
-    // Configuramos el timeout para desvanecer la alerta
-    const timeout = setTimeout(() => {
-      setShowAlert(false)
-      setAlertMessage('')
-    }, 3000) // Duración de la animación de desvanecimiento
-    setFadeOutTimeout(timeout)
+  const triggerModal = (title, message, success) => {
+    setModalTitle(title) // Actualizamos el título del modal
+    setModalMessage(message)
+    setIsSuccess(success)
+    setShowModal(true)
   }
 
-  const triggerSuccess = (message) => {
-    setAlertMessage(message)
-    setShowSuccess(true)
-    // Si hay un timeout en proceso, lo limpiamos
-    if (fadeOutTimeout) clearTimeout(fadeOutTimeout)
-    // Configuramos el timeout para desvanecer la alerta
-    const timeout = setTimeout(() => {
-      setShowSuccess(false)
-      setAlertMessage('')
-    }, 3000) // Duración de la animación de desvanecimiento
-    setFadeOutTimeout(timeout)
-  }
+  const handleCloseModal = () => setShowModal(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,11 +88,13 @@ const ProductForm = () => {
       setGetSuppliers(suppliersRes)
     }
     fetchData()
+    // Recupera la información del usuario desde localStorage
+    const storedUser = localStorage.getItem('user')
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser)
+      setUser(parsedUser)
+    }
   }, [])
-
-  useEffect(() => {
-    setCategory(categoryId)
-  }, [categoryId])
 
   return (
     <>
@@ -111,21 +109,19 @@ const ProductForm = () => {
           </h1>
           <form className="row" onSubmit={handleSubmit}>
             <div className="mb-3 col-4">
-              <label className=" fw-semibold form-label">Categoria</label>
+              <label className="fw-semibold form-label">Categoria</label>
               <select
                 className="shadow-sm form-select"
                 aria-label="Categoria"
                 value={category}
-                onChange={handleCategory}
+                onChange={(e) => setCategory(e.target.value)}
               >
                 <option value="">Seleccione</option>
-                {getCategories?.data.map((cat) => {
-                  return (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  )
-                })}
+                {getCategories?.data.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="mb-3 col-md-4">
@@ -134,7 +130,7 @@ const ProductForm = () => {
                 className="shadow-sm form-select"
                 aria-label="Proveedor"
                 value={provider}
-                onChange={handleProvider}
+                onChange={(e) => setProvider(e.target.value)}
               >
                 <option value="">Seleccione</option>
                 {getSuppliers?.data.map((prov) => (
@@ -151,8 +147,9 @@ const ProductForm = () => {
               <input
                 type="text"
                 className="shadow-sm form-control"
-                id="exampleFormControlInput1"
                 placeholder="Ingrese un producto"
+                value={nameProduct}
+                onChange={(e) => setNameProduct(e.target.value)}
               />
             </div>
 
@@ -162,6 +159,8 @@ const ProductForm = () => {
                 type="text"
                 className="shadow-sm form-control"
                 placeholder="Ingrese un codigo"
+                value={codeProduct}
+                onChange={(e) => setCodeProduct(e.target.value)}
               />
             </div>
             <div className="mb-3 col-4">
@@ -170,6 +169,8 @@ const ProductForm = () => {
                 type="text"
                 className="shadow-sm form-control"
                 placeholder="Ingrese una ubicación"
+                value={ubicationProduct}
+                onChange={(e) => setUbicationProduct(e.target.value)}
               />
             </div>
             <div className="mb-3 col-4">
@@ -178,35 +179,39 @@ const ProductForm = () => {
                 type="number"
                 className="shadow-sm form-control"
                 placeholder="Ingrese una cantidad"
+                value={quantityProduct}
+                onChange={(e) => setQuantityProduct(e.target.value)}
                 min={1}
               />
             </div>
-            
-            {category === '3' && (
+            {(category === '3' || category === '6') && (
               <div className="mb-2 col-4">
-                <label className="fw-semibold form-label">Talla</label>
+                <label className="fw-semibold form-label">
+                  {category === '3' ? 'Talla' : 'Tamaño'}
+                </label>
                 <input
                   type="text"
                   className="shadow-sm form-control"
-                  placeholder="Ingrese una talla"
-                />
-              </div>
-            )}
-            {category === '6' && (
-              <div className="mb-2 col-4">
-                <label className="fw-semibold form-label">Tamaño</label>
-                <input
-                  type="text"
-                  className="shadow-sm form-control"
-                  placeholder="Ingrese un tamaño"
+                  placeholder={`Ingrese una ${
+                    category === '3' ? 'talla' : 'tamaño'
+                  }`}
+                  value={size}
+                  onChange={(e) => setSize(e.target.value)}
                 />
               </div>
             )}
             <div className="row mt-2">
               <div className="col-12 d-flex justify-content-end">
                 <button
-                  className="btn fw-semibold px-3 button-hover"
-                  style={{ backgroundColor: '#DAA520', color: '#ffff' }}
+                  className="btn fw-semibold px-5 button-hover mx-1"
+                  style={{ background: '#791021', color: '#ffff' }}
+                  onClick={() => navigate(-1)}
+                >
+                  Regresar
+                </button>
+                <button
+                  className="btn fw-semibold px-3 button-hover mx-1"
+                  style={{ background: '#DAA520', color: '#ffff' }}
                   type="submit"
                 >
                   Agregar producto
@@ -216,34 +221,14 @@ const ProductForm = () => {
           </form>
         </div>
       </div>
-      {showAlert && (
-        <div
-          className="alert position-fixed bottom-0 end-0 mb-3 me-3 text-white alert-animation"
-          style={{ background: '#DF3030', zIndex: '100' }}
-          role="alert"
-        >
-          <div className="mb-2">
-            <span style={{ marginRight: '0.5rem', fontSize: '1.5rem' }}>
-              <GoAlertFill color="yellow" />
-            </span>
-            {alertMessage}
-          </div>
-        </div>
-      )}
-      {showASuccess && (
-        <div
-          className="alert position-fixed bottom-0 end-0 mb-3 me-3 text-white alert-animation"
-          style={{ background: '#28a745', zIndex: '100' }}
-          role="alert"
-        >
-          <div className="mb-2">
-            <span style={{ marginRight: '0.5rem', fontSize: '1.5rem' }}>
-              < FaCheck color="white" />
-            </span>
-            {alertMessage}
-          </div>
-        </div>
-      )}
+      {/* Mostrar el modal con título personalizado */}
+      <OperationModal
+        showModal={showModal}
+        handleClose={handleCloseModal}
+        isSuccess={isSuccess}
+        title={modalTitle} // Pasamos el título personalizado
+        message={modalMessage}
+      />
     </>
   )
 }

@@ -5,6 +5,8 @@ import { GoAlertFill } from 'react-icons/go'
 import imgLeathers from '../assets/Leathers.jpg'
 import logo from '../assets/logo.png'
 import LoadingScreen from '../public/LoadingScreen'
+import { Link } from 'react-router-dom'
+import { TbArrowRightFromArc } from "react-icons/tb";
 
 function LoginPage() {
   const { signin, errors: loginErrors, isAuthenticated } = useAuth()
@@ -65,6 +67,18 @@ function LoginPage() {
         <LoadingScreen />
       ) : (
         <>
+          <Link
+            to="/"
+            className="position-absolute rounded-circle p-2 m-3 card-scale"
+            type="button"
+            style={{
+              color: '#DAA520',
+              zIndex: '2',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.5)',
+            }}
+          >
+            <TbArrowRightFromArc size={30} />
+          </Link>
           <div className="vh-100 vw-100 position-absolute background-fallback">
             <img
               src={imgLeathers}
@@ -115,8 +129,10 @@ function LoginPage() {
               </button>
               <div className="mt-3">
                 <h6 className="text-white">Credenciales de Invitado</h6>
-                <span className="text-white me-5">Usuario: Invitado</span>
-                <span className="text-white ms-4">Contraseña: SoyHomo</span>
+                <span className="text-white me-5">Usuario: invitado</span>
+                <span className="text-white ms-3">
+                  Contraseña: Invitado2024
+                </span>
               </div>
             </form>
           </div>
