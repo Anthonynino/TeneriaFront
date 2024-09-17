@@ -76,7 +76,7 @@ export const menuOption = [
   },
   {
     id: 2,
-    link: '/homepage',
+    link: '/reports',
     icon: (
       <HiDocumentReport
         className="mx-2"
