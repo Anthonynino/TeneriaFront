@@ -10,6 +10,8 @@ import ProductsTable from './pages/ProductsTable'
 import CategoryPage from './pages/CategoryPage'
 import AddProviders from './pages/AddProviders'
 import ProvidersTable from './pages/ProvidersTable'
+import ReportPage from './pages/ReportsPage'
+import ReportSupplier from './pages/ReportsSuppliers'
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
               
               <Route path="/add-provider" element={<AddProviders />} />
               <Route path="/providerstable" element={<ProvidersTable />} />
+              <Route path="/reports" element={<ReportPage/>} />
+              <Route path="/report-suppliers" element={<ReportSupplier/>} />
             </Route>
           </Routes>
         </BrowserRouter>
