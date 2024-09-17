@@ -17,6 +17,7 @@ import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import OperationModal from './SuccessfulOperation'
 import Tooltip from '@mui/material/Tooltip'
+import { Modal } from 'react-bootstrap'
 
 function ProductsTable() {
   const navigate = useNavigate() // Hook para navegar entre páginas
@@ -32,6 +33,9 @@ function ProductsTable() {
   const [modalMessage, setModalMessage] = useState('') // Mensaje que se le enviara al modal
   const [modalTitle, setModalTitle] = useState('') // titulo del modal
   const [isSuccess, setIsSuccess] = useState(true) // Si fue un error o fue exitoso
+  const [modalDeleteProduct, setModalDeleteProduct] = useState(false)
+  const [productId, setProductId] = useState('')
+  const [productName, setProductName] = useState('')
 
   //Columnas predefinidas para la tabla
   const columnProducts = [
@@ -63,8 +67,14 @@ function ProductsTable() {
   //Funcion para cerrar el modal que indica si fue un error en la operacion o un exito
   const handleCloseModal = () => setShowModal(false)
 
+  const handleOpenDeleteProduct = (prodId, prodName) => {
+    setModalDeleteProduct(true)
+    setProductId(prodId)
+    setProductName(prodName)
+  }
+
   // Función para eliminar el producto
-  const handleDeleteProduct = async (productId) => {
+  const handleDeleteProduct = async () => {
     try {
       const response = await deleteProduct(productId)
 
@@ -121,7 +131,7 @@ function ProductsTable() {
                 className="mx-2"
                 size={20}
                 type="button"
-                onClick={() => handleDeleteProduct(prod.id)}
+                onClick={() => handleOpenDeleteProduct(prod.id, prod.name)}
               />
             </>
           ) : (
@@ -300,6 +310,40 @@ function ProductsTable() {
         title={modalTitle} // Pasamos el título personalizado
         message={modalMessage}
       />
+      <Modal show={modalDeleteProduct} centered>
+        <div className="p-5 text-center fonts-letter rounded-1">
+          <div className="d-flex flex-column">
+            <FaTrashAlt
+              className="mx-auto mb-1 text-secondary opacity-25"
+              size={120}
+            />
+            <h3 className="my-2 fw-bold" style={{ color: '#791021' }}>
+              {productName}
+            </h3>
+            <p className="text-secondary" style={{ fontSize: '17px' }}>
+              ¿Estas seguro de eliminar este producto?
+            </p>
+          </div>
+          <div className="mt-1 d-flex justify-content-center">
+            <button
+              style={{ background: '#701021' }}
+              className="btn mx-2 px-4"
+              type="button"
+              onClick={() => setModalDeleteProduct(false)}
+            >
+              <span className="my-auto text-white">Cancelar</span>
+            </button>
+            <button
+              style={{ background: '#DAA520' }}
+              className="btn mx-2 px-4"
+              type="button"
+              onClick={handleDeleteProduct}
+            >
+              <span className="my-auto text-white">Eliminar</span>
+            </button>
+          </div>
+        </div>
+      </Modal>
     </>
   )
 }
