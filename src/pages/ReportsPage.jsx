@@ -22,7 +22,7 @@ function ReportPage() {
             title: 'Movimientos',
             icon: <FaArrowRightArrowLeft size={48} />,
             color: '#801817',
-            link: "movimientos",
+            link: "report-products",
         },
     ]
 

@@ -12,6 +12,7 @@ import AddProviders from './pages/AddProviders'
 import ProvidersTable from './pages/ProvidersTable'
 import ReportPage from './pages/ReportsPage'
 import ReportSupplier from './pages/ReportsSuppliers'
+import ReportProducts from './pages/ReportProduct'
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
               <Route path="/providerstable" element={<ProvidersTable />} />
               <Route path="/reports" element={<ReportPage/>} />
               <Route path="/report-suppliers" element={<ReportSupplier/>} />
+              <Route path="/report-products" element={<ReportProducts/>} />
             </Route>
           </Routes>
         </BrowserRouter>
