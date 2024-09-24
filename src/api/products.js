@@ -15,9 +15,9 @@ export const editProductRequest = (
   quantity,
   size,
   categoryId,
-  supplierId,
+  supplierId
 ) => {
-  return axios.post(`/updateProduct`, {
+  return axios.post(`/generateEntryOrExit`, {
     name,
     code,
     ubication,
@@ -51,11 +51,11 @@ export const createProductRequest = (
 }
 
 export const deleteProduct = (id) => {
-  return axios.delete(`/products/${id}`)
+  return axios.delete(`/deleteProduct/${id}`)
 }
 
 export const updateStock = (updateData) => {
-  return axios.post(`/updateProduct`, {
+  return axios.put(`/editProduct`, {
     productId: updateData.productId,
     quantity: updateData.count,
     userId: updateData.userId,

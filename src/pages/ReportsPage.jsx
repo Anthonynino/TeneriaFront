@@ -17,7 +17,7 @@ function ReportPage() {
       title: "Transacciones",
       icon: <FaArrowRightArrowLeft size={100} />,
       color: "#801817",
-      link: "transacciones",
+      link: "report-products",
     },
   ];
 
