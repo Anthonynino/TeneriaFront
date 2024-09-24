@@ -7,6 +7,7 @@ import logo from '../assets/logo.png'
 import LoadingScreen from '../public/LoadingScreen'
 import { Link } from 'react-router-dom'
 import { TbArrowRightFromArc } from 'react-icons/tb'
+import { IoIosArrowBack } from "react-icons/io";
 
 function LoginPage() {
   const { signin, errors: loginErrors, isAuthenticated } = useAuth()
@@ -77,7 +78,7 @@ function LoginPage() {
               boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.5)',
             }}
           >
-            <TbArrowRightFromArc size={30} />
+            
           </Link>
           <div className="vh-100 vw-100 position-absolute background-fallback">
             <img

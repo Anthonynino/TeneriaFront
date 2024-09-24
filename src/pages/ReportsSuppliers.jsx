@@ -1,15 +1,10 @@
 import Navbar from '../Navbar'
-import { useEffect, useState } from 'react'
 import { SiMicrosoftexcel } from "react-icons/si";
 import { FaRegFilePdf } from "react-icons/fa";
 import axios from '../api/axios';
 
 
 function ReportSupplier() {
-    
-    const [user, setUser] = useState() // Estado para guardar el valor del localstorage del usuario
-
-
     
     const downloadExcel = async () => {
         try {
@@ -61,30 +56,21 @@ function ReportSupplier() {
     const cardReport = [
         {
             id: 1,
-            title: ' Reporte en Excel',
-            icon: <SiMicrosoftexcel size={48} />,
-            color: '#217346', // Verde similar al de Excel
+            title: 'Excel',
+            description: 'Formato de tablas centrado en el análisis detallado y personalizado de datos',
+            icon: <SiMicrosoftexcel size={80} />,
+            color: '#207244', // Verde similar al de Excel
             action: downloadExcel,
         },
         {
             id: 2,
-            title: ' Reporte en PDF',
-            icon: <FaRegFilePdf size={48} />,
-            color: '#FF0000', // Rojo similar al de PDF
+            title: 'PDF',
+            description: 'Excelente formato estándar para compartir datos de manera segura y presentable.',
+            icon: <FaRegFilePdf size={80} />,
+            color: '#da2727', // Rojo similar al de PDF
             action: downloadPDF,
         },
     ]
-
-    useEffect(() => {
-        
-
-        // Recupera la información del usuario desde localStorage
-        const storedUser = localStorage.getItem('user')
-        if (storedUser) {
-            const parsedUser = JSON.parse(storedUser)
-            setUser(parsedUser)
-        }
-    }, [])
 
     return (
         <>
@@ -92,8 +78,8 @@ function ReportSupplier() {
             <div className="d-flex" style={{ minHeight: '100vh' }}>
                 <Navbar />
                 <div className="w-50 row my-auto mx-auto">
-                    <h1 className="text-center fw-bold" style={{ color: '#791021' }}>
-                        {user?.rolId === "1" ? 'Panel de Administración' : 'Panel de Información'}
+                    <h1 className="text-center fw-bold mb-4" style={{ color: '#791021' }}>
+                        ¿En qué formato?
                     </h1>
                     {cardReport.map((card) => {
                         return (
@@ -103,23 +89,17 @@ function ReportSupplier() {
                             >
                                 <div
                                     style={{ background: card.color }}
-                                    className="no-underline text-white p-3 my-2 rounded-4 shadow"
+                                    type="button"
+                                    className="no-underline text-white p-4 rounded-5 shadow text-center reports-card"
+                                    onClick={card.action} 
                                 >
                                     <div
-                                        className="text-center"
-                                        style={{ filter: 'opacity(0.4)' }}
+                                        className="opacity-50 my-2"
                                     >
                                         {card.icon}
                                     </div>
-                                    <h3 className="text-center">{card.title}</h3>
-                                    <p className="text-center">
-                                        <button 
-                                            onClick={card.action} 
-                                            className="btn btn-light"
-                                        >
-                                            Generar
-                                        </button>
-                                    </p>
+                                    <h2>{card.title}</h2>
+                                    <p>{card.description}</p>
                                 </div>
                             </div>
                         )
