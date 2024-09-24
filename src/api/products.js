@@ -8,20 +8,21 @@ export const getOneProduct = (productId) => {
   return axios.get(`/product/${productId}`)
 }
 
+
 export const editProductRequest = (
+  productId,
   name,
   code,
   ubication,
-  quantity,
   size,
   categoryId,
   supplierId,
 ) => {
-  return axios.post(`/updateProduct`, {
+  return axios.post(`/editProduct`, {
+    productId,
     name,
     code,
     ubication,
-    quantity,
     size,
     categoryId,
     supplierId,

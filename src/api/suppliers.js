@@ -4,8 +4,8 @@ export const getAllSuppliers = () => {
   return axios.get(`/suppliers`);
 };
 
-export const getOneSupplier = () => {
-  return axios.get(`/supplier/:supplierId`);
+export const getOneSupplier = (supplierId) => {
+  return axios.get(`/supplier/${supplierId}`);
 };
 
 

@@ -1,6 +1,6 @@
 import Navbar from '../Navbar'
 import { useState } from 'react'
-import { addSupplier } from '../api/providers'
+import { addSuppliersRequest } from '../api/suppliers'
 import { useNavigate } from 'react-router-dom'
 import OperationModal from './SuccessfulOperation'
 
@@ -35,7 +35,7 @@ const AddProviders = () => {
       setShowModal(true)
     } else {
       try {
-        await addSupplier(
+        await addSuppliersRequest(
           companyName,
           RIF,
           location,

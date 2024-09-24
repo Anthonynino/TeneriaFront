@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getAllSuppliers } from '../api/providers'
-import { FaTrashAlt, FaEdit } from 'react-icons/fa'
+import { FaEdit } from 'react-icons/fa'
 import { FaPlus } from 'react-icons/fa'
 import TableContainer from '@mui/material/TableContainer'
 import TableBody from '@mui/material/TableBody'
@@ -47,9 +47,6 @@ function ProvidersTable() {
     console.log('Boton Para editar el proveedor')
   }
 
-  const handleDeleteProduct = () => {
-    console.log('Boton para eliminar el proveedor')
-  }
 
   useEffect(() => {
     //Se extrae los datos guardados del localStorage y se extrea su rolId
@@ -81,15 +78,6 @@ function ProvidersTable() {
               size={20}
               type="button"
               onClick={() => handleEditSupplier(index)} // Maneja la acción de edición
-            />
-
-            {/* Ícono de eliminar */}
-            <FaTrashAlt
-              key={`prodTrash ${index}`}
-              className="mx-2"
-              size={20}
-              type="button"
-              onClick={() => handleDeleteProduct(index)} // Maneja la acción de eliminación
             />
           </>
         )
