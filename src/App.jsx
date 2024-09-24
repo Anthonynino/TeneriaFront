@@ -12,6 +12,7 @@ import AddProviders from './pages/AddProviders'
 import ProvidersTable from './pages/ProvidersTable'
 import ReportPage from './pages/ReportsPage'
 import ReportSupplier from './pages/ReportsSuppliers'
+import EditProduct from './pages/EditProduct'
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
                 element={<ProductsTable />}
               />
               <Route path="/category" element={<CategoryPage />} />
-              
+              <Route path="/editproduct/:productId/:categoryId" element={<EditProduct />} />
               <Route path="/add-provider" element={<AddProviders />} />
               <Route path="/providerstable" element={<ProvidersTable />} />
               <Route path="/reports" element={<ReportPage/>} />

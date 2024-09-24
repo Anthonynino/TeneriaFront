@@ -4,6 +4,30 @@ export const getProductsRequest = (categoryId) => {
   return axios.get(`/products/${categoryId}`)
 }
 
+export const getOneProduct = (productId) => {
+  return axios.get(`/product/${productId}`)
+}
+
+export const editProductRequest = (
+  name,
+  code,
+  ubication,
+  quantity,
+  size,
+  categoryId,
+  supplierId,
+) => {
+  return axios.post(`/updateProduct`, {
+    name,
+    code,
+    ubication,
+    quantity,
+    size,
+    categoryId,
+    supplierId,
+  })
+}
+
 export const createProductRequest = (
   name,
   code,

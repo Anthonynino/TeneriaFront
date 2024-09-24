@@ -1,3 +1,14 @@
+.reports-card {
+  transition: all 0.3s;
+}
+
+.reports-card:hover {
+  filter: brightness(120%);
+  scale: 1.02
+}
+
+
+
 .form-login {
   width: 26rem !important;
 }
