@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 
 const ProductForm = () => {
   const navigate = useNavigate()
-  const { categoryId } = useParams()
+  const { productId, categoryId } = useParams()
   const [category, setCategory] = useState(categoryId || '')
   const [provider, setProvider] = useState('')
   const [nameProduct, setNameProduct] = useState('')
@@ -24,6 +24,7 @@ const ProductForm = () => {
   const [modalTitle, setModalTitle] = useState('')
   const [isSuccess, setIsSuccess] = useState(true)
   const [user, setUser] = useState()
+  console.log("productoId: " + productId)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -41,6 +42,7 @@ const ProductForm = () => {
       try {
         // Intenta crear el producto y espera la respuesta
         await createProductRequest(
+          productId,
           nameProduct,
           codeProduct,
           ubicationProduct,

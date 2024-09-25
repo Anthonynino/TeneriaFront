@@ -3,15 +3,18 @@ import Navbar from '../Navbar'
 import { useParams } from 'react-router-dom'
 import { editProductRequest } from '../api/products'
 import OperationModal from './SuccessfulOperation'
-import { getOneSupplier, getAllSuppliers } from '../api/suppliers'
+import { getAllSuppliers } from '../api/suppliers'
 import { getOneProduct } from '../api/products'
+import { getAllCategories } from '../api/categories' // Asegúrate de tener la función para obtener categorías
 import { useNavigate } from 'react-router-dom'
 
 const EditProduct = () => {
   const navigate = useNavigate()
   const { productId, categoryId } = useParams()
-  const [suppliers, setSuppliers] = useState()
+  const [suppliers, setSuppliers] = useState([])
   const [supplierId, setSupplierId] = useState('')
+  const [categories, setCategories] = useState([]) // Estado para las categorías
+  const [selectedCategoryId, setSelectedCategoryId] = useState(categoryId) // Inicializar con la categoría actual
   const [codeProduct, setCodeProduct] = useState('')
   const [ubicationProduct, setUbicationProduct] = useState('')
   const [size, setSize] = useState('')
@@ -20,8 +23,7 @@ const EditProduct = () => {
   const [modalMessage, setModalMessage] = useState('')
   const [modalTitle, setModalTitle] = useState('')
   const [isSuccess, setIsSuccess] = useState(true)
- /*  const [user, setUser] = useState() */
-  const [nameProduct, setNameProduct] = useState()
+  const [nameProduct, setNameProduct] = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -31,40 +33,36 @@ const EditProduct = () => {
       !codeProduct ||
       !ubicationProduct ||
       !productId ||
-      !categoryId ||
-      !supplierId 
+      !selectedCategoryId ||
+      !supplierId
     ) {
-      triggerModal('Error', 'Los campos deben estar llenos', false) // Error con título personalizado
+      triggerModal('Error', 'Los campos deben estar llenos', false)
     } else {
       try {
-        // Intenta crear el producto y espera la respuesta
         await editProductRequest(
           productId,
           nameProduct,
           codeProduct,
           ubicationProduct,
           size,
-          categoryId,
+          selectedCategoryId,
           supplierId
         )
-
-        // Si la creación es exitosa, muestra el mensaje de éxito
         triggerModal('¡Éxito!', '¡Producto Editado correctamente!', true)
         setNameProduct('')
         setCodeProduct('')
         setUbicationProduct('')
         setSize('')
       } catch (error) {
-        // Si ocurre un error, muestra el mensaje de error
         const errorMessage =
           error.response?.data?.message || 'Error desconocido'
-        triggerModal('Error', errorMessage, false) // Error con título personalizado
+        triggerModal('Error', errorMessage, false)
       }
     }
   }
 
   const triggerModal = (title, message, success) => {
-    setModalTitle(title) // Actualizamos el título del modal
+    setModalTitle(title)
     setModalMessage(message)
     setIsSuccess(success)
     setShowModal(true)
@@ -73,24 +71,35 @@ const EditProduct = () => {
   const handleCloseModal = () => setShowModal(false)
 
   useEffect(() => {
-    setNameProduct(getProduct ? getProduct.data.name : "")
-    setCodeProduct(getProduct ? getProduct.data.code : "")
-    setUbicationProduct(getProduct ? getProduct.data.ubication : "")
-    setSize(getProduct ? getProduct.data.size : "")
+    setNameProduct(getProduct ? getProduct.data.name : '')
+    setCodeProduct(getProduct ? getProduct.data.code : '')
+    setUbicationProduct(getProduct ? getProduct.data.ubication : '')
+    setSize(getProduct ? getProduct.data.size : '')
   }, [getProduct])
 
   useEffect(() => {
     const fetchData = async () => {
-      const getProduct = await getOneProduct(productId)
-      const supplierId = getProduct ? getProduct.data.supplierId : null
-      const getSupplier = await getOneSupplier(supplierId)
-      const suppliersRes = await getAllSuppliers()
-      setSuppliers(suppliersRes)
-      setSupplierId(getSupplier.data.id)
-      setGetProduct(getProduct)
+      try {
+        const getProduct = await getOneProduct(productId)
+        const supplierId = getProduct ? getProduct.data.supplierId : null
+        const suppliersRes = await getAllSuppliers()
+        const categoriesRes = await getAllCategories() // Obtiene las categorías
+
+        if (suppliersRes && suppliersRes.data) {
+          setSuppliers(suppliersRes.data)
+        }
+        if (categoriesRes && categoriesRes.data) {
+          setCategories(categoriesRes.data)
+        }
+
+        setSupplierId(supplierId)
+        setGetProduct(getProduct)
+      } catch (error) {
+        console.error('Error fetching suppliers or product data:', error)
+      }
     }
     fetchData()
-  }, [])
+  }, [productId])
 
   return (
     <>
@@ -101,11 +110,29 @@ const EditProduct = () => {
           style={{ paddingTop: '3rem' }}
         >
           <h1 className="text-center fw-bold mb-5" style={{ color: '#791021' }}>
-            ¿Que desea editar?
+            ¿Qué desea editar?
           </h1>
           <form className="row" onSubmit={handleSubmit}>
+            {/* Selector de Categoría */}
+            <div className="mb-3 col-md-4">
+              <label className="fw-semibold form-label">Categoría</label>
+              <select
+                className="shadow-sm form-select"
+                aria-label="Categoría"
+                value={selectedCategoryId}
+                onChange={(e) => setSelectedCategoryId(e.target.value)}
+              >
+                <option value="">Seleccione</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="mb-3 col-md-4">
+            {/* Selector de Proveedor */}
+            <div className="mb-3 col-md-4">
               <label className="fw-semibold form-label">Proveedor</label>
               <select
                 className="shadow-sm form-select"
@@ -114,13 +141,14 @@ const EditProduct = () => {
                 onChange={(e) => setSupplierId(e.target.value)}
               >
                 <option value="">Seleccione</option>
-                {suppliers?.data.map((prov) => (
+                {suppliers.map((prov) => (
                   <option key={prov.id} value={prov.id}>
                     {prov.name}
                   </option>
                 ))}
               </select>
             </div>
+
             <div className="mb-3 col-4">
               <label className="fw-semibold form-label">
                 Nombre del producto
@@ -135,15 +163,16 @@ const EditProduct = () => {
             </div>
 
             <div className="mb-3 col-4">
-              <label className="fw-semibold form-label">Codigo</label>
+              <label className="fw-semibold form-label">Código</label>
               <input
                 type="text"
                 className="shadow-sm form-control"
-                placeholder="Ingrese un codigo"
+                placeholder="Ingrese un código"
                 value={codeProduct}
                 onChange={(e) => setCodeProduct(e.target.value)}
               />
             </div>
+
             <div className="mb-3 col-4">
               <label className="fw-semibold form-label">Ubicación</label>
               <input
@@ -154,27 +183,30 @@ const EditProduct = () => {
                 onChange={(e) => setUbicationProduct(e.target.value)}
               />
             </div>
-            {(categoryId === '3' || categoryId === '6') && (
+
+            {(selectedCategoryId === '3' || selectedCategoryId === '6') && (
               <div className="mb-2 col-4">
                 <label className="fw-semibold form-label">
-                  {categoryId === '3' ? 'Talla' : 'Tamaño'}
+                  {selectedCategoryId === '3' ? 'Talla' : 'Tamaño'}
                 </label>
                 <input
                   type="text"
                   className="shadow-sm form-control"
                   placeholder={`Ingrese una ${
-                    categoryId === '3' ? 'talla' : 'tamaño'
+                    selectedCategoryId === '3' ? 'talla' : 'tamaño'
                   }`}
                   value={size}
                   onChange={(e) => setSize(e.target.value)}
                 />
               </div>
             )}
+
             <div className="row mt-2">
               <div className="col-12 d-flex justify-content-end">
                 <button
                   className="btn fw-semibold px-4 button-hover mx-1"
                   style={{ background: '#791021', color: '#ffff' }}
+                  type='button'
                   onClick={() => navigate(-1)}
                 >
                   Regresar
@@ -191,12 +223,11 @@ const EditProduct = () => {
           </form>
         </div>
       </div>
-      {/* Mostrar el modal con título personalizado */}
       <OperationModal
         showModal={showModal}
         handleClose={handleCloseModal}
         isSuccess={isSuccess}
-        title={modalTitle} // Pasamos el título personalizado
+        title={modalTitle}
         message={modalMessage}
         back={true}
       />

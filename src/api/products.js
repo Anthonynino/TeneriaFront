@@ -8,7 +8,6 @@ export const getOneProduct = (productId) => {
   return axios.get(`/product/${productId}`)
 }
 
-
 export const editProductRequest = (
   productId,
   name,
@@ -18,7 +17,8 @@ export const editProductRequest = (
   categoryId,
   supplierId
 ) => {
-  return axios.post(`/generateEntryOrExit`, {
+  return axios.put(`/editProduct`, {
+    productId,
     name,
     code,
     ubication,
@@ -55,7 +55,7 @@ export const deleteProduct = (id) => {
 }
 
 export const updateStock = (updateData) => {
-  return axios.put(`/editProduct`, {
+  return axios.post(`/generateEntryOrExit`, {
     productId: updateData.productId,
     quantity: updateData.count,
     userId: updateData.userId,
