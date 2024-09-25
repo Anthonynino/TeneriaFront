@@ -99,7 +99,8 @@ const EditProduct = () => {
       }
     }
     fetchData()
-  }, [productId])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>

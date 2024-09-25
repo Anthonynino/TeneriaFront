@@ -43,7 +43,8 @@ function UpdateStock({
     }
 
     fetchDepartments()
-  }, [modalUpdateStock])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Maneja el cambio en el select de los productos
   const handleProductChange = (event) => {
