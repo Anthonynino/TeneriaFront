@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getAllSuppliers } from '../api/providers'
 import { FaEdit } from 'react-icons/fa'
+import { FaEdit } from 'react-icons/fa'
 import { FaPlus } from 'react-icons/fa'
 import TableContainer from '@mui/material/TableContainer'
 import TableBody from '@mui/material/TableBody'
@@ -45,6 +46,10 @@ function ProvidersTable() {
 
   const handleEditSupplier = () => {
     console.log('Boton Para editar el proveedor')
+  }
+
+  const handleDeleteProduct = () => {
+    console.log('Boton para eliminar el proveedor')
   }
 
   useEffect(() => {
