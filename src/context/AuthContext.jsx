@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 export const AuthContext = createContext()
 
 // Hook personalizado para usar el contexto de autenticación.
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {

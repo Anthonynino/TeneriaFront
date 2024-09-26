@@ -47,11 +47,20 @@ function ProductsTable() {
     ...(categoryId == '3' || categoryId == '6'
       ? [{ id: 'size', label: 'Tamaño', minWidth: 70 }]
       : []),
+    { id: 'proveedor', label: 'Proveedor', minWidth: 70 },
   ]
   // Actualización de la función createDataProducts
-  const createDataProducts = (size, ubication, code, quantity, name, add) => {
+  const createDataProducts = (
+    proveedor,
+    size,
+    ubication,
+    code,
+    quantity,
+    name,
+    add
+  ) => {
     // define los datos que mostrarán en pantalla
-    return { size, ubication, code, quantity, name, add }
+    return { proveedor, size, ubication, code, quantity, name, add }
   }
 
   const handleChangePage = (event, newPage) => {
@@ -117,7 +126,6 @@ function ProductsTable() {
       setArrayProduct(res.data)
       // Procesar los productos
       const processedDataProducts = res.data.map((prod, index) => {
-      
         const icons =
           parseInt(prod.quantity) === 0 ? (
             <>
@@ -126,7 +134,9 @@ function ProductsTable() {
                 className="mx-2"
                 size={20}
                 type="button"
-                onClick={() => navigate(`/editproduct/${prod.id}/${categoryId}`)}
+                onClick={() =>
+                  navigate(`/editproduct/${prod.id}/${categoryId}`)
+                }
               />
               <FaTrashAlt
                 key={`prodTrash ${index}`}
@@ -143,7 +153,9 @@ function ProductsTable() {
                 className="mx-2"
                 size={20}
                 type="button"
-                onClick={() => navigate(`/editproduct/${prod.id}/${categoryId}`)}
+                onClick={() =>
+                  navigate(`/editproduct/${prod.id}/${categoryId}`)
+                }
               />
               <Tooltip title="Este producto puede ser eliminado cuando el stock esté en 0">
                 <span>
@@ -157,6 +169,7 @@ function ProductsTable() {
             </>
           )
         return createDataProducts(
+          prod.supplier.name,
           categoryId === '3' || categoryId === '6' ? prod.size : '',
           prod.ubication,
           prod.code,

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { getAllSuppliers } from '../api/providers'
+import { getAllSuppliers } from '../api/suppliers'
 import { FaEdit } from 'react-icons/fa'
 import { FaPlus } from 'react-icons/fa'
 import TableContainer from '@mui/material/TableContainer'

@@ -24,7 +24,6 @@ const ProductForm = () => {
   const [modalTitle, setModalTitle] = useState('')
   const [isSuccess, setIsSuccess] = useState(true)
   const [user, setUser] = useState()
-  console.log("productoId: " + productId)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
