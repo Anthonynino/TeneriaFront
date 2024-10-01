@@ -1,18 +1,8 @@
-import axios from './axios';
-import { setCache, getCache } from '../public/globalCache.js'; // Importa las funciones de caché
+import axios from './axios'
 
 // Función para obtener las cantidades
 export const getAllQuantities = async () => {
-  const cacheKey = 'quantities';
+  const response = await axios.get('/dashboard')
 
-  // Verifica si los datos ya están en caché
-  if (getCache(cacheKey)) {
-    return getCache(cacheKey); // Devuelve los datos de la caché si están disponibles
-  }
-
-  // Si no están en caché, realiza la solicitud
-  const response = await axios.get('/dashboard');
-  setCache(cacheKey, response); // Almacena los datos en la caché
-
-  return response; // Devuelve los datos obtenidos
-};
+  return response
+}

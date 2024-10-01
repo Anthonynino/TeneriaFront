@@ -1,5 +1,5 @@
 import axios from './axios'
-import { setCache, getCache } from '../public/globalCache.js'
+import { setCache, getCache, clearCache } from '../public/globalCache.js'
 
 // Función para obtener productos por categoría
 export const getProductsRequest = async (categoryId) => {
@@ -31,7 +31,7 @@ export const editProductRequest = (
   categoryId,
   supplierId
 ) => {
-  return axios.put(`/editProduct`, {
+  const response = axios.put(`/editProduct`, {
     productId,
     name,
     code,
@@ -40,6 +40,10 @@ export const editProductRequest = (
     categoryId,
     supplierId,
   })
+  // Invalida el caché de proveedores, para forzar que se recargue al hacer getAllSuppliers
+  clearCache(`products_${categoryId}`)
+
+  return response
 }
 
 export const createProductRequest = (
@@ -52,7 +56,7 @@ export const createProductRequest = (
   supplierId,
   userId
 ) => {
-  return axios.post(`/createProduct`, {
+  const response = axios.post(`/createProduct`, {
     name,
     code,
     ubication,
@@ -62,18 +66,33 @@ export const createProductRequest = (
     supplierId,
     userId,
   })
+
+  // Invalida el caché de proveedores, para forzar que se recargue al hacer getAllSuppliers
+  clearCache(`products_${categoryId}`)
+
+  return response
 }
 
-export const deleteProduct = (id) => {
-  return axios.delete(`/deleteProduct/${id}`)
+export const deleteProduct = (id, categoryId) => {
+  const response = axios.delete(`/deleteProduct/${id}`)
+
+  // Invalida el caché de proveedores, para forzar que se recargue al hacer getAllSuppliers
+  clearCache(`products_${categoryId}`)
+
+  return response
 }
 
-export const updateStock = (updateData) => {
-  return axios.post(`/generateEntryOrExit`, {
+export const updateStock = (updateData, categoryId) => {
+  const response = axios.post(`/generateEntryOrExit`, {
     productId: updateData.productId,
     quantity: updateData.count,
     userId: updateData.userId,
     departmentId: updateData.departmentId,
     movementType: updateData.movementType,
   })
+
+  // Invalida el caché de proveedores, para forzar que se recargue al hacer getAllSuppliers
+  clearCache(`products_${categoryId}`)
+
+  return response
 }

@@ -85,7 +85,7 @@ function ProductsTable() {
   // Función para eliminar el producto
   const handleDeleteProduct = async () => {
     try {
-      const response = await deleteProduct(productId)
+      const response = await deleteProduct(productId, categoryId)
 
       // Verifica que la respuesta sea exitosa
       if (response.status === 200) {
@@ -316,6 +316,7 @@ function ProductsTable() {
           setModalMessage={setModalMessage}
           setModalTitle={setModalTitle}
           setIsSuccess={setIsSuccess}
+          categoryId={categoryId}
         />
       </div>
       {/* Mostrar el modal con título personalizado */}

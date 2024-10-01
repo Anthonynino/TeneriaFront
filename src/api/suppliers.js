@@ -1,5 +1,5 @@
 import axios from './axios'
-import { setCache, getCache } from '../public/globalCache.js' // Importa las funciones de caché
+import { setCache, getCache, clearCache } from '../public/globalCache.js' // Importa las funciones de caché
 
 // Función para obtener todos los proveedores
 export const getAllSuppliers = async () => {
@@ -22,9 +22,34 @@ export const getOneSupplier = (supplierId) => {
 }
 
 export const addSuppliersRequest = (name, rif, ubication, isNational) => {
-  return axios.post(`/createSupplier`, { name, rif, ubication, isNational })
+  const response = axios.post(`/createSupplier`, {
+    name,
+    rif,
+    ubication,
+    isNational,
+  })
+
+  // Invalida el caché de proveedores, para forzar que se recargue al hacer getAllSuppliers
+  clearCache('suppliers')
+
+  return response
 }
 
-export const editSupplier = (supplierId, companyName, location, IsInNationalTerritory) => {
-  return axios.put(`/editSupplier`, {supplierId, companyName, location, IsInNationalTerritory})
+export const editSupplier = (
+  supplierId,
+  companyName,
+  location,
+  IsInNationalTerritory
+) => {
+  const response = axios.put(`/editSupplier`, {
+    supplierId,
+    companyName,
+    location,
+    IsInNationalTerritory,
+  })
+
+  // Invalida el caché de proveedores, para forzar que se recargue al hacer getAllSuppliers
+  clearCache('suppliers')
+
+  return response
 }

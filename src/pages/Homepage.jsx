@@ -6,6 +6,7 @@ import { FaTruck, FaBox, FaChartBar } from 'react-icons/fa'
 function Homepage() {
   const [productNumber, setProductNumber] = useState(0)
   const [supplierNumber, setSupplierNumber] = useState(0)
+  const [reportNumber, setReportNumber] = useState(0)
   const [user, setUser] = useState() // Estado para guardar el valor del localstorage del usuario
 
   const cardHome = [
@@ -28,7 +29,7 @@ function Homepage() {
       title: 'Reportes',
       icon: <FaChartBar size={48} />,
       color: '#4E3D2E',
-      total: 0,
+      total: reportNumber,
     },
   ]
 
@@ -37,6 +38,7 @@ function Homepage() {
       const getAllValues = await getAllQuantities()
       setProductNumber(getAllValues.data.productQuantity)
       setSupplierNumber(getAllValues.data.supplierQuantity)
+      setReportNumber(getAllValues.data.reportQuantity)
     }
     fetchData()
 
@@ -55,7 +57,9 @@ function Homepage() {
         <Navbar />
         <div className="w-50 row my-auto mx-auto">
           <h1 className="text-center fw-bold" style={{ color: '#791021' }}>
-            {user?.rolId === "1" ? 'Panel de Administración' : 'Panel de Información'}
+            {user?.rolId === '1'
+              ? 'Panel de Administración'
+              : 'Panel de Información'}
           </h1>
           {cardHome.map((card) => {
             return (

@@ -15,6 +15,7 @@ function UpdateStock({
   setModalMessage, // Estado para enviar un mensaje al modal
   setModalTitle, // Enviar el título si es error, etc.
   setIsSuccess, // Indicar que si fue un error o fue un éxito
+  categoryId, // Valor de la categoria Id
 }) {
   const [countPlus, setCountPlus] = useState(0) // Estado encargado de almacenar el valor de la cantidad
   const [selectedProduct, setSelectedProduct] = useState('') // Estado para manejar la selección del producto
@@ -43,7 +44,7 @@ function UpdateStock({
     }
 
     fetchDepartments()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Maneja el cambio en el select de los productos
@@ -106,7 +107,7 @@ function UpdateStock({
       }
 
       // Realiza la actualización del stock
-      const response = await updateStock(updateData)
+      const response = await updateStock(updateData, categoryId)
 
       // Verifica que la respuesta sea exitosa
       if (response.status === 200) {
@@ -242,6 +243,7 @@ UpdateStock.propTypes = {
   setModalMessage: PropTypes.func.isRequired,
   setModalTitle: PropTypes.func.isRequired,
   setIsSuccess: PropTypes.func.isRequired,
+  categoryId: PropTypes.string,
 }
 
 export default UpdateStock

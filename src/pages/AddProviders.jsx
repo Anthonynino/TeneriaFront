@@ -46,6 +46,7 @@ const AddProviders = () => {
         setModalTitle('¡Hecho!')
         setModalMessage('¡Operación realizada exitosamente!')
         setShowModal(true)
+        navigate(-1)
       } catch (error) {
         setIsSuccess(false)
         setModalTitle('Error')

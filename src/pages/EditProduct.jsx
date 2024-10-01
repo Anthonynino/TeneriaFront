@@ -53,6 +53,7 @@ const EditProduct = () => {
         setCodeProduct('')
         setUbicationProduct('')
         setSize('')
+        navigate(-1)
       } catch (error) {
         const errorMessage =
           error.response?.data?.message || 'Error desconocido'
@@ -99,7 +100,7 @@ const EditProduct = () => {
       }
     }
     fetchData()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -207,7 +208,7 @@ const EditProduct = () => {
                 <button
                   className="btn fw-semibold px-4 button-hover mx-1"
                   style={{ background: '#791021', color: '#ffff' }}
-                  type='button'
+                  type="button"
                   onClick={() => navigate(-1)}
                 >
                   Regresar
