@@ -14,6 +14,7 @@ import ReportPage from './pages/ReportsPage'
 import ReportSupplier from './pages/ReportsSuppliers'
 import ReportProducts from './pages/ReportProduct'
 import EditProduct from './pages/EditProduct'
+import EditSupplier from './pages/EditSupplier'
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
               />
               <Route path="/category" element={<CategoryPage />} />
               <Route path="/editproduct/:productId/:categoryId" element={<EditProduct />} />
+              <Route path="/editsupplier/:supplierId" element={<EditSupplier />} />
               <Route path="/add-provider" element={<AddProviders />} />
               <Route path="/providerstable" element={<ProvidersTable />} />
               <Route path="/reports" element={<ReportPage/>} />

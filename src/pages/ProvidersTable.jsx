@@ -43,9 +43,6 @@ function ProvidersTable() {
     setPage(0)
   }
 
-  const handleEditSupplier = () => {
-    console.log('Boton Para editar el proveedor')
-  }
 
   useEffect(() => {
     //Se extrae los datos guardados del localStorage y se extrea su rolId
@@ -76,7 +73,7 @@ function ProvidersTable() {
               className="mx-2"
               size={20}
               type="button"
-              onClick={() => handleEditSupplier(index)} // Maneja la acción de edición
+              onClick={() => navigate(`/editsupplier/${supp.id}`)} // Maneja la acción de edición
             />
           </>
         )
