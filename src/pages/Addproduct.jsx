@@ -15,65 +15,80 @@ const ProductForm = () => {
   const [nameProduct, setNameProduct] = useState('')
   const [codeProduct, setCodeProduct] = useState('')
   const [ubicationProduct, setUbicationProduct] = useState('')
-  const [quantityProduct, setQuantityProduct] = useState('')
-  const [size, setSize] = useState('')
+  const [specifications, setSpecifications] = useState('')
   const [getCategories, setGetCategories] = useState()
   const [getSuppliers, setGetSuppliers] = useState()
   const [showModal, setShowModal] = useState(false)
   const [modalMessage, setModalMessage] = useState('')
-  const [modalTitle, setModalTitle] = useState('')
   const [isSuccess, setIsSuccess] = useState(true)
-  const [user, setUser] = useState()
+
+  // Mapeo de las categorías con sus códigos
+  const categoryCodes = {
+    1: 'ELE-',
+    2: 'PLO-',
+    3: 'SEG-',
+    4: 'MTL-',
+    5: 'PNT-',
+    6: 'TRN-',
+  }
+
+  // Establecer el valor inicial del código cuando se cargue la categoría
+  useEffect(() => {
+    const fetchData = async () => {
+      const categoriesRes = await getAllCategories()
+      const currentCategory = categoriesRes.data.find(
+        (c) => c.id === categoryId
+      )
+      setGetCategories(currentCategory)
+
+      const suppliersRes = await getAllSuppliers()
+      setGetSuppliers(suppliersRes)
+    }
+    fetchData()
+  }, [categoryId])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const quantityInt = parseInt(quantityProduct)
 
-    if (
-      !category ||
-      !nameProduct ||
-      !codeProduct ||
-      !ubicationProduct ||
-      !quantityProduct
-    ) {
-      triggerModal('Error', 'Los campos deben estar llenos', false) // Error con título personalizado
+    if (!category || !nameProduct || !codeProduct || !ubicationProduct) {
+      triggerModal('Los campos deben estar llenos', false)
     } else {
       try {
-        // Intenta crear el producto y espera la respuesta
+        // Añadir prefijo al código del producto
+        const prefix = categoryCodes[getCategories?.id] || ''
+        const finalCodeProduct = prefix + codeProduct
+
+        // Añadir prefijo a la ubicación
+        const finalUbicationProduct = 'Bodega ' + ubicationProduct
+
         await createProductRequest(
           nameProduct,
-          codeProduct,
-          ubicationProduct,
-          quantityInt,
-          size,
+          finalCodeProduct,
+          finalUbicationProduct,
+          specifications,
           categoryId,
-          provider,
-          user.id
+          provider
         )
 
-        // Si la creación es exitosa, muestra el mensaje de éxito
-        triggerModal('¡Éxito!', '¡Producto agregado correctamente!', true)
+        triggerModal('¡Producto agregado correctamente!', true)
 
-        // Limpiar los campos después del éxito
+        // Limpiar campos después del envío
         setCategory('')
         setProvider('')
         setNameProduct('')
-        setCodeProduct('')
+        setCodeProduct('') // Solo limpiar el valor numérico, sin prefijo
         setUbicationProduct('')
-        setQuantityProduct('')
-        setSize('')
+        setSpecifications('')
         navigate(-1)
       } catch (error) {
-        // Si ocurre un error, muestra el mensaje de error
         const errorMessage =
           error.response?.data?.message || 'Error desconocido'
-        triggerModal('Error', errorMessage, false) // Error con título personalizado
+        triggerModal(errorMessage, false)
       }
     }
   }
 
-  const triggerModal = (title, message, success) => {
-    setModalTitle(title) // Actualizamos el título del modal
+  const triggerModal = (message, success) => {
     setModalMessage(message)
     setIsSuccess(success)
     setShowModal(true)
@@ -81,21 +96,23 @@ const ProductForm = () => {
 
   const handleCloseModal = () => setShowModal(false)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const categoriesRes = await getAllCategories()
-      setGetCategories(categoriesRes)
-      const suppliersRes = await getAllSuppliers()
-      setGetSuppliers(suppliersRes)
-    }
-    fetchData()
-    // Recupera la información del usuario desde localStorage
-    const storedUser = localStorage.getItem('user')
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser)
-      setUser(parsedUser)
-    }
-  }, [])
+  // Validar que solo se puedan ingresar 3 dígitos en el código
+  const handleCodeChange = (e) => {
+    const inputCode = e.target.value.replace(/\D/g, '').slice(0, 3) // Solo 3 números
+    setCodeProduct(inputCode)
+  }
+
+  // Validar que solo se permita una letra y un número en la ubicación
+  const handleUbicationChange = (e) => {
+    const inputUbication = e.target.value
+
+    // Extraer la letra y el número
+    const validUbication = inputUbication
+      .replace(/[^A-Za-z0-9]/g, '')
+      .slice(0, 2) // Solo una letra y un número
+
+    setUbicationProduct(validUbication)
+  }
 
   return (
     <>
@@ -106,24 +123,17 @@ const ProductForm = () => {
           style={{ paddingTop: '3rem' }}
         >
           <h1 className="text-center fw-bold mb-5" style={{ color: '#791021' }}>
-            ¿Que desea agregar?
+            ¿Qué desea agregar?
           </h1>
           <form className="row" onSubmit={handleSubmit}>
             <div className="mb-3 col-4">
               <label className="fw-semibold form-label">Categoria</label>
-              <select
-                className="shadow-sm form-select"
-                aria-label="Categoria"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <option value="">Seleccione</option>
-                {getCategories?.data.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
+              <input
+                type="text"
+                className="shadow-sm form-control"
+                value={getCategories ? getCategories?.name : ''}
+                readOnly
+              />
             </div>
             <div className="mb-3 col-md-4">
               <label className="fw-semibold form-label">Proveedor</label>
@@ -155,52 +165,42 @@ const ProductForm = () => {
             </div>
 
             <div className="mb-3 col-4">
-              <label className="fw-semibold form-label">Codigo</label>
+              <label className="fw-semibold form-label">Código</label>
               <input
                 type="text"
                 className="shadow-sm form-control"
-                placeholder="Ingrese un codigo"
+                placeholder="Ingrese 3 dígitos"
                 value={codeProduct}
-                onChange={(e) => setCodeProduct(e.target.value)}
+                onChange={handleCodeChange}
+                maxLength="3" // Limita a 3 caracteres numéricos
               />
             </div>
+
             <div className="mb-3 col-4">
               <label className="fw-semibold form-label">Ubicación</label>
               <input
                 type="text"
                 className="shadow-sm form-control"
-                placeholder="Ingrese una ubicación"
+                placeholder="Letra y número"
                 value={ubicationProduct}
-                onChange={(e) => setUbicationProduct(e.target.value)}
+                onChange={handleUbicationChange}
+                maxLength="2" // Limita a 2 caracteres (letra y número)
               />
             </div>
-            <div className="mb-3 col-4">
-              <label className="fw-semibold form-label">Cantidad</label>
+            <div className="mb-2 col-4">
+              <label className="fw-semibold form-label">
+                {category === '3' ? 'Talla' : 'Especificación'}
+              </label>
               <input
-                type="number"
+                type="text"
                 className="shadow-sm form-control"
-                placeholder="Ingrese una cantidad"
-                value={quantityProduct}
-                onChange={(e) => setQuantityProduct(e.target.value)}
-                min={1}
+                placeholder={`Ingrese una ${
+                  category === '3' ? 'talla' : 'especificación'
+                }`}
+                value={specifications}
+                onChange={(e) => setSpecifications(e.target.value)}
               />
             </div>
-            {(category === '3' || category === '6') && (
-              <div className="mb-2 col-4">
-                <label className="fw-semibold form-label">
-                  {category === '3' ? 'Talla' : 'Tamaño'}
-                </label>
-                <input
-                  type="text"
-                  className="shadow-sm form-control"
-                  placeholder={`Ingrese una ${
-                    category === '3' ? 'talla' : 'tamaño'
-                  }`}
-                  value={size}
-                  onChange={(e) => setSize(e.target.value)}
-                />
-              </div>
-            )}
             <div className="row mt-2">
               <div className="col-12 d-flex justify-content-end">
                 <button
@@ -222,13 +222,11 @@ const ProductForm = () => {
           </form>
         </div>
       </div>
-      {/* Mostrar el modal con título personalizado */}
       <OperationModal
         showModal={showModal}
-        handleClose={handleCloseModal}
-        isSuccess={isSuccess}
-        title={modalTitle} // Pasamos el título personalizado
         message={modalMessage}
+        isSuccess={isSuccess}
+        handleClose={handleCloseModal}
       />
     </>
   )

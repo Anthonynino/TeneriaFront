@@ -11,8 +11,9 @@ const AddProviders = () => {
   const [modalMessage, setModalMessage] = useState('')
   const [modalTitle, setModalTitle] = useState('')
   const [isSuccess, setIsSuccess] = useState(true)
+  const [code, setCode] = useState('') // Nuevo estado para el código
 
-  //Funcion para resetear los valores del form despues de el envio
+  // Función para resetear los valores del form después del envío
   const resetForm = () => {
     setSelectedOption('si')
     document.getElementById('addSupplierForm').reset()
@@ -23,15 +24,26 @@ const AddProviders = () => {
     setSelectedOption(event.target.value)
   }
 
+  // Validación para permitir solo tres dígitos en el código
+  const handleCodeChange = (e) => {
+    const value = e.target.value
+    if (/^\d{0,3}$/.test(value)) {
+      // Solo permitir hasta 3 dígitos
+      setCode(value)
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     const companyName = e.target[0].value
     const RIF = e.target[1].value
     const location = e.target[2].value
-    if (companyName === '' || RIF === '' || location === '') {
+    const fullCode = `prov-${code}` // Agregar el prefijo al código
+
+    if (companyName === '' || RIF === '' || location === '' || code === '') {
       setIsSuccess(false)
       setModalTitle('Error')
-      setModalMessage('Los campos deben estar llenos.')
+      setModalMessage('Todos los campos deben estar llenos.')
       setShowModal(true)
     } else {
       try {
@@ -39,6 +51,7 @@ const AddProviders = () => {
           companyName,
           RIF,
           location,
+          fullCode,
           selectedOption === 'si'
         )
         resetForm()
@@ -46,7 +59,6 @@ const AddProviders = () => {
         setModalTitle('¡Hecho!')
         setModalMessage('¡Operación realizada exitosamente!')
         setShowModal(true)
-        navigate(-1)
       } catch (error) {
         setIsSuccess(false)
         setModalTitle('Error')
@@ -90,7 +102,8 @@ const AddProviders = () => {
                 placeholder="Ingrese un código"
               />
             </div>
-            <div className="mb-3 col-7">
+
+            <div className="mb-3 col-6">
               <label className="fw-semibold form-label">Ubicación</label>
               <input
                 type="text"
@@ -98,39 +111,55 @@ const AddProviders = () => {
                 placeholder="Ingrese una ubicación"
               />
             </div>
+
             <div className="mb-3 col-4">
-              <label className="fw-semibold form-label">
+              <label className="fw-semibold form-label">Código</label>
+              <input
+                type="text"
+                className="shadow-sm form-control"
+                value={code}
+                onChange={handleCodeChange}
+                placeholder="Ingrese 3 dígitos"
+                maxLength="3"
+              />
+            </div>
+
+            <div className="mb-3 col-4 ms-1">
+              <label className="fw-semibold form-label d-flex justify-content-end">
                 ¿Está en el territorio nacional?
               </label>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  id="radioSi"
-                  name="territorioNacional"
-                  value="si"
-                  checked={selectedOption === 'si'}
-                  onChange={handleRadioChange}
-                />
-                <label className="form-check-label" htmlFor="radioSi">
-                  Sí
-                </label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  id="radioNo"
-                  name="territorioNacional"
-                  value="no"
-                  checked={selectedOption === 'no'}
-                  onChange={handleRadioChange}
-                />
-                <label className="form-check-label" htmlFor="radioNo">
-                  No
-                </label>
+              <div className="d-flex">
+                <div className="form-check me-3">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    id="radioSi"
+                    name="territorioNacional"
+                    value="si"
+                    checked={selectedOption === 'si'}
+                    onChange={handleRadioChange}
+                  />
+                  <label className="form-check-label" htmlFor="radioSi">
+                    Sí
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    id="radioNo"
+                    name="territorioNacional"
+                    value="no"
+                    checked={selectedOption === 'no'}
+                    onChange={handleRadioChange}
+                  />
+                  <label className="form-check-label" htmlFor="radioNo">
+                    No
+                  </label>
+                </div>
               </div>
             </div>
+
             <div className="row mt-2">
               <div className="col-12 d-flex justify-content-end">
                 <button

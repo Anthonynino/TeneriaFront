@@ -15,27 +15,35 @@ const EditSupplier = () => {
   const [isSuccess, setIsSuccess] = useState(true)
   const [nameCompany, setNameCompany] = useState('')
   const [ubication, setUbication] = useState('')
-  const back = true //retroceder de página si se completó la edición del proveedor
+  const [fullCode, setFullCode] = useState('') // Nuevo campo para el código completo
+  const [codeNumber, setNumberCode] = useState('') // Parte numérica editable
 
-  //Funcion para resetear los valores del form despues de el envio
   const resetForm = () => {
     setSelectedOption('si')
     document.getElementById('editSupplierForm').reset()
   }
 
-  // Maneja el cambio en los botones de radio
   const handleRadioChange = (event) => {
     setSelectedOption(event.target.value)
+  }
+
+  const handleCodigoNumericoChange = (e) => {
+    const value = e.target.value
+    if (/^\d*$/.test(value) && value.length <= 3) {
+      setNumberCode(value) // Solo permite hasta 3 dígitos
+    }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     const companyName = e.target[0].value
     const location = e.target[1].value
-    if (companyName === '' || location === '') {
+    const finalCode = fullCode.slice(0, -3) + codeNumber
+
+    if (companyName === '' || location === '' || codeNumber === '') {
       setIsSuccess(false)
       setModalTitle('Error')
-      setModalMessage('Los campos deben estar llenos.')
+      setModalMessage('Todos los campos deben estar llenos.')
       setShowModal(true)
     } else {
       try {
@@ -43,18 +51,21 @@ const EditSupplier = () => {
           supplierId,
           companyName,
           location,
-          selectedOption === 'si'
+          selectedOption === 'si',
+          finalCode
         )
         resetForm()
         setIsSuccess(true)
         setModalTitle('¡Hecho!')
         setModalMessage('¡Operación realizada exitosamente!')
         setShowModal(true)
-        navigate(-1)
       } catch (error) {
+        const errorMessage =
+          error.response?.data?.message ||
+          'Hubo un problema al realizar la operación.'
         setIsSuccess(false)
         setModalTitle('Error')
-        setModalMessage('Hubo un problema al realizar la operación.')
+        setModalMessage(errorMessage)
         setShowModal(true)
       }
     }
@@ -67,6 +78,8 @@ const EditSupplier = () => {
       const supplierData = await getOneSupplier(supplierId)
       setNameCompany(supplierData.data.name)
       setUbication(supplierData.data.location)
+      setFullCode(supplierData.data.code)
+      setNumberCode(supplierData.data.code.slice(-3))
       setSelectedOption(
         supplierData
           ? supplierData.data.IsInNationalTerritory == true
@@ -97,7 +110,6 @@ const EditSupplier = () => {
               <input
                 type="text"
                 className="shadow-sm form-control"
-                id="exampleFormControlInput1"
                 placeholder="Ingrese un nombre"
                 value={nameCompany}
                 onChange={(e) => setNameCompany(e.target.value)}
@@ -113,37 +125,57 @@ const EditSupplier = () => {
                 onChange={(e) => setUbication(e.target.value)}
               />
             </div>
-            <div className="mb-3 col-12">
-              <label className="fw-semibold form-label">
+            <div className="mb-3 col-6">
+              <label className="fw-semibold form-label d-flex">
                 ¿Está en el territorio nacional?
               </label>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  id="radioSi"
-                  name="territorioNacional"
-                  value="si"
-                  checked={selectedOption === 'si'}
-                  onChange={handleRadioChange}
-                />
-                <label className="form-check-label" htmlFor="radioSi">
-                  Sí
-                </label>
+              <div className="d-flex mt-3">
+                <div className="form-check me-3">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    id="radioSi"
+                    name="territorioNacional"
+                    value="si"
+                    checked={selectedOption === 'si'}
+                    onChange={handleRadioChange}
+                  />
+                  <label className="form-check-label" htmlFor="radioSi">
+                    Sí
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    id="radioNo"
+                    name="territorioNacional"
+                    value="no"
+                    checked={selectedOption === 'no'}
+                    onChange={handleRadioChange}
+                  />
+                  <label className="form-check-label" htmlFor="radioNo">
+                    No
+                  </label>
+                </div>
               </div>
-              <div className="form-check">
+            </div>
+            <div className="mb-3 col-6">
+              <label className="fw-semibold form-label">
+                Código del proveedor
+              </label>
+              <div className="input-group">
+                <span className="input-group-text">
+                  {fullCode.slice(0, -3)}
+                </span>
                 <input
-                  className="form-check-input"
-                  type="radio"
-                  id="radioNo"
-                  name="territorioNacional"
-                  value="no"
-                  checked={selectedOption === 'no'}
-                  onChange={handleRadioChange}
+                  type="text"
+                  className="form-control"
+                  value={codeNumber}
+                  onChange={handleCodigoNumericoChange}
+                  maxLength="3"
+                  placeholder="###"
                 />
-                <label className="form-check-label" htmlFor="radioNo">
-                  No
-                </label>
               </div>
             </div>
             <div className="row mt-2">
@@ -174,7 +206,6 @@ const EditSupplier = () => {
         isSuccess={isSuccess}
         title={modalTitle}
         message={modalMessage}
-        back={back}
       />
     </>
   )

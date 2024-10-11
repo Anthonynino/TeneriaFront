@@ -13,8 +13,6 @@ function CategoryPage() {
   const [categories, setCategories] = useState([])
   const [categoriesMapped, setCategoriesMapped] = useState([])
 
-  console.log(categoriesMapped)
-
   useEffect(() => {
     const fetchData = async () => {
       const response = await getAllCategories()
@@ -74,8 +72,8 @@ function CategoryPage() {
           className="w-75 row my-auto mx-auto"
           style={{ paddingTop: '3rem' }}
         >
-          <h1 className="text-center fw-bold mb-4" style={{ color: '#791021' }}>
-            ¿Qué deseas buscar?
+          <h1 className="text-center fw-bold mb-4 mt-4" style={{ color: '#791021' }}>
+            ¿Qué categoría deseas explorar?
           </h1>
           {categoriesMapped.map((card) => {
             return (

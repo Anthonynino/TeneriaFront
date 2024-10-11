@@ -4,10 +4,8 @@
 
 .reports-card:hover {
   filter: brightness(120%);
-  scale: 1.02
+  scale: 1.02;
 }
-
-
 
 .form-login {
   width: 26rem !important;
@@ -22,7 +20,7 @@
   width: 100%;
 }
 
-.button-submit {
+form .button-submit {
   background-color: #791021;
   transition: all 0.5s;
 }
@@ -33,11 +31,11 @@
 }
 
 .shadow-box {
-  box-shadow: -5px -5px 15px #791021, 5px 5px 15px #DAA520;
+  box-shadow: -5px -5px 15px #791021, 5px 5px 15px #daa520;
 }
 
-.button-submit:hover {
-  background-color: #DAA520;
+form .button-submit:hover {
+  background-color: #daa520;
 }
 
 .no-underline {
@@ -59,7 +57,7 @@
   animation: fade-in-out 3s ease-in-out;
 }
 
-.no-select { 
+.no-select {
   user-select: none;
 }
 

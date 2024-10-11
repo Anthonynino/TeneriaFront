@@ -14,56 +14,63 @@ const EditProduct = () => {
   const [suppliers, setSuppliers] = useState([])
   const [supplierId, setSupplierId] = useState('')
   const [categories, setCategories] = useState([]) // Estado para las categorías
-  const [selectedCategoryId, setSelectedCategoryId] = useState(categoryId) // Inicializar con la categoría actual
-  const [codeProduct, setCodeProduct] = useState('')
   const [ubicationProduct, setUbicationProduct] = useState('')
-  const [size, setSize] = useState('')
+  const [specifications, setSpecifications] = useState('')
   const [getProduct, setGetProduct] = useState()
   const [showModal, setShowModal] = useState(false)
   const [modalMessage, setModalMessage] = useState('')
-  const [modalTitle, setModalTitle] = useState('')
   const [isSuccess, setIsSuccess] = useState(true)
   const [nameProduct, setNameProduct] = useState('')
+  const [codePrefix, setCodePrefix] = useState('')
+  const [codeNumber, setCodeNumber] = useState('')
+
+  const categoryCodes = {
+    1: 'ELE-',
+    2: 'PLO-',
+    3: 'SEG-',
+    4: 'MTL-',
+    5: 'PNT-',
+    6: 'TRN-',
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (
       !nameProduct ||
-      !codeProduct ||
+      !codeNumber ||
       !ubicationProduct ||
       !productId ||
-      !selectedCategoryId ||
+      !categoryId ||
       !supplierId
     ) {
-      triggerModal('Error', 'Los campos deben estar llenos', false)
+      triggerModal('Los campos deben estar llenos', false)
     } else {
       try {
         await editProductRequest(
           productId,
           nameProduct,
-          codeProduct,
+          `${codePrefix}${codeNumber}`,
           ubicationProduct,
-          size,
-          selectedCategoryId,
+          specifications,
+          categoryId,
           supplierId
         )
-        triggerModal('¡Éxito!', '¡Producto Editado correctamente!', true)
+        triggerModal('¡Producto Editado correctamente!', true)
         setNameProduct('')
-        setCodeProduct('')
+        setCodeNumber('')
         setUbicationProduct('')
-        setSize('')
+        setSpecifications('')
         navigate(-1)
       } catch (error) {
         const errorMessage =
           error.response?.data?.message || 'Error desconocido'
-        triggerModal('Error', errorMessage, false)
+        triggerModal(errorMessage, false)
       }
     }
   }
 
-  const triggerModal = (title, message, success) => {
-    setModalTitle(title)
+  const triggerModal = (message, success) => {
     setModalMessage(message)
     setIsSuccess(success)
     setShowModal(true)
@@ -73,24 +80,30 @@ const EditProduct = () => {
 
   useEffect(() => {
     setNameProduct(getProduct ? getProduct.data.name : '')
-    setCodeProduct(getProduct ? getProduct.data.code : '')
     setUbicationProduct(getProduct ? getProduct.data.ubication : '')
-    setSize(getProduct ? getProduct.data.size : '')
+    setSpecifications(getProduct ? getProduct.data.specifications : '')
   }, [getProduct])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const getProduct = await getOneProduct(productId)
-        const supplierId = getProduct ? getProduct.data.supplierId : null
         const suppliersRes = await getAllSuppliers()
         const categoriesRes = await getAllCategories() // Obtiene las categorías
+        const productCode = getProduct ? getProduct.data.code.slice(4, 7) : null
+        const supplierId = getProduct ? getProduct.data.supplierId : null
+        const categoryPrefix = categoryCodes[categoryId]
+        setCodePrefix(categoryPrefix)
+        setCodeNumber(productCode)
 
         if (suppliersRes && suppliersRes.data) {
           setSuppliers(suppliersRes.data)
         }
         if (categoriesRes && categoriesRes.data) {
-          setCategories(categoriesRes.data)
+          const currentCategory = categoriesRes.data.find(
+            (c) => c.id === categoryId
+          )
+          setCategories(currentCategory)
         }
 
         setSupplierId(supplierId)
@@ -102,6 +115,31 @@ const EditProduct = () => {
     fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  //Validacion para la estructura del codigo
+  const handleCodeChange = (e) => {
+    const value = e.target.value
+    if (/^\d*$/.test(value) && value.length <= 3) {
+      setCodeNumber(value)
+    }
+  }
+
+  //Validacion para la estructura de la ubicacion
+  const handleUbicationChange = (e) => {
+    const { value } = e.target
+    const prefix = 'Bodega ' // La palabra que no se puede eliminar
+
+    // Asegúrate de que el valor empiece con el prefijo
+    if (value.startsWith(prefix)) {
+      // Permite modificar solo la letra y el número después del prefijo
+      const newValue =
+        prefix + value.slice(prefix.length).replace(/[^A-Za-z0-9]/g, '') // Permitir solo letras y números
+      setUbicationProduct(newValue)
+    } else {
+      // Si no empieza con el prefijo, solo establece el valor si empieza con el prefijo
+      setUbicationProduct(value.startsWith(prefix) ? value : prefix)
+    }
+  }
 
   return (
     <>
@@ -117,20 +155,13 @@ const EditProduct = () => {
           <form className="row" onSubmit={handleSubmit}>
             {/* Selector de Categoría */}
             <div className="mb-3 col-md-4">
-              <label className="fw-semibold form-label">Categoría</label>
-              <select
-                className="shadow-sm form-select"
-                aria-label="Categoría"
-                value={selectedCategoryId}
-                onChange={(e) => setSelectedCategoryId(e.target.value)}
-              >
-                <option value="">Seleccione</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
+              <label className="fw-semibold form-label">Categoria</label>
+              <input
+                type="text"
+                className="shadow-sm form-control"
+                value={categories ? categories?.name : ''}
+                readOnly
+              />
             </div>
 
             {/* Selector de Proveedor */}
@@ -165,14 +196,20 @@ const EditProduct = () => {
             </div>
 
             <div className="mb-3 col-4">
-              <label className="fw-semibold form-label">Código</label>
-              <input
-                type="text"
-                className="shadow-sm form-control"
-                placeholder="Ingrese un código"
-                value={codeProduct}
-                onChange={(e) => setCodeProduct(e.target.value)}
-              />
+              <label className="fw-semibold form-label">
+                Código del proveedor
+              </label>
+              <div className="input-group">
+                <span className="input-group-text">{codePrefix}</span>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={codeNumber}
+                  onChange={handleCodeChange}
+                  maxLength="3"
+                  placeholder="###"
+                />
+              </div>
             </div>
 
             <div className="mb-3 col-4">
@@ -182,26 +219,23 @@ const EditProduct = () => {
                 className="shadow-sm form-control"
                 placeholder="Ingrese una ubicación"
                 value={ubicationProduct}
-                onChange={(e) => setUbicationProduct(e.target.value)}
+                onChange={handleUbicationChange}
               />
             </div>
-
-            {(selectedCategoryId === '3' || selectedCategoryId === '6') && (
-              <div className="mb-2 col-4">
-                <label className="fw-semibold form-label">
-                  {selectedCategoryId === '3' ? 'Talla' : 'Tamaño'}
-                </label>
-                <input
-                  type="text"
-                  className="shadow-sm form-control"
-                  placeholder={`Ingrese una ${
-                    selectedCategoryId === '3' ? 'talla' : 'tamaño'
-                  }`}
-                  value={size}
-                  onChange={(e) => setSize(e.target.value)}
-                />
-              </div>
-            )}
+            <div className="mb-2 col-4">
+              <label className="fw-semibold form-label">
+                {categoryId === '3' ? 'Talla' : 'Especificacion'}
+              </label>
+              <input
+                type="text"
+                className="shadow-sm form-control"
+                placeholder={`Ingrese una ${
+                  categoryId === '3' ? 'talla' : 'especificacion'
+                }`}
+                value={specifications}
+                onChange={(e) => setSpecifications(e.target.value)}
+              />
+            </div>
 
             <div className="row mt-2">
               <div className="col-12 d-flex justify-content-end">
@@ -229,9 +263,7 @@ const EditProduct = () => {
         showModal={showModal}
         handleClose={handleCloseModal}
         isSuccess={isSuccess}
-        title={modalTitle}
         message={modalMessage}
-        back={true}
       />
     </>
   )

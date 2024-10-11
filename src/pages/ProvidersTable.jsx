@@ -25,12 +25,13 @@ function ProvidersTable() {
     { id: 'add', label: rolId == '1' && 'Agregar', minWidth: 20 },
     { id: 'name', label: 'Nombre', minWidth: 70 },
     { id: 'rif', label: 'RIF', minWidth: 70 },
+    { id: 'code', label: 'Codigo', minWidth: 70 },
     { id: 'location', label: 'Ubicación', minWidth: 70 },
   ]
 
-  const createDataSupplier = (location, rif, name, add) => {
+  const createDataSupplier = (location, rif, name, code, add) => {
     //define los datos que mostrarán en pantalla
-    return { location, rif, name, add }
+    return { location, rif, name, code, add}
   }
 
   const handleChangePage = (event, newPage) => {
@@ -80,11 +81,13 @@ function ProvidersTable() {
         const name = supp.name
         const rif = supp.rif
         const location = supp.location
+        const code = supp.code
 
         return createDataSupplier(
           location,
           rif,
           name,
+          code,
           rolId == '1' ? icons : ''
         )
       })

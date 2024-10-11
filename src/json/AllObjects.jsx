@@ -27,7 +27,7 @@ export const menuOption = [
         size={30}
       />
     ),
-    title: 'Ver Categorías',
+    title: 'Ver Productos',
   },
   {
     id: 2,
@@ -55,7 +55,7 @@ export const menuOption = [
   },
   {
     id: 4,
-    link: '/login',
+    link: '/',
     icon: (
       <ImExit
         className="mx-2"

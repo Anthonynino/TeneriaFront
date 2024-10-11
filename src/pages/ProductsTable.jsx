@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getProductsRequest, deleteProduct } from '../api/products'
-import UpdateStock from './UpdateStock'
 import Navbar from '../Navbar'
 import { FaTrashAlt, FaEdit } from 'react-icons/fa'
 import { ImExit, ImEnter } from 'react-icons/im'
@@ -18,6 +17,7 @@ import Table from '@mui/material/Table'
 import OperationModal from './SuccessfulOperation'
 import Tooltip from '@mui/material/Tooltip'
 import { Modal } from 'react-bootstrap'
+import '../styles/GlobalsButtons.css'
 
 function ProductsTable() {
   const navigate = useNavigate() // Hook para navegar entre páginas
@@ -25,9 +25,6 @@ function ProductsTable() {
   const [page, setPage] = useState(0) // Encargado de manejar la paginación de la tabla
   const [rowsPerPage, setRowsPerPage] = useState(5) // Calcula las filas por página
   const [rowProducts, setRowProducts] = useState([]) // Guarda las filas que se van agregando a la tabla
-  const [modalUpdateStock, setModalUpdateStock] = useState(false)
-  const [arrayProduct, setArrayProduct] = useState([]) // Guardar la data de los productos
-  const [isExit, setIsExit] = useState(false) // Estado que controla si es una salida y si no con esto evaluamos que sera una entrada
   const [rolId, setRolId] = useState('') // Se guarda el id del rol desde el localStorage
   const [showModal, setShowModal] = useState(false) //Variable para abrir el modal
   const [modalMessage, setModalMessage] = useState('') // Mensaje que se le enviara al modal
@@ -41,18 +38,16 @@ function ProductsTable() {
   const columnProducts = [
     { id: 'add', label: rolId == '1' && 'Agregar', minWidth: 20 },
     { id: 'name', label: 'Nombre', minWidth: 70 },
-    { id: 'quantity', label: 'Cantidad', minWidth: 70 },
-    { id: 'code', label: 'Código', minWidth: 70 },
+    { id: 'quantity', label: 'Cantidad', minWidth: 20 },
+    { id: 'code', label: 'Código', minWidth: 20 },
     { id: 'ubication', label: 'Ubicación', minWidth: 70 },
-    ...(categoryId == '3' || categoryId == '6'
-      ? [{ id: 'size', label: 'Tamaño', minWidth: 70 }]
-      : []),
+    { id: 'specifications', label: 'Especificación', minWidth: 70 },
     { id: 'proveedor', label: 'Proveedor', minWidth: 70 },
   ]
   // Actualización de la función createDataProducts
   const createDataProducts = (
     proveedor,
-    size,
+    specifications,
     ubication,
     code,
     quantity,
@@ -60,7 +55,7 @@ function ProductsTable() {
     add
   ) => {
     // define los datos que mostrarán en pantalla
-    return { proveedor, size, ubication, code, quantity, name, add }
+    return { proveedor, specifications, ubication, code, quantity, name, add }
   }
 
   const handleChangePage = (event, newPage) => {
@@ -123,7 +118,6 @@ function ProductsTable() {
     try {
       // Llamar al servicio para obtener productos por categoryId
       const res = await getProductsRequest(categoryId)
-      setArrayProduct(res.data)
       // Procesar los productos
       const processedDataProducts = res.data.map((prod, index) => {
         const icons =
@@ -170,7 +164,7 @@ function ProductsTable() {
           )
         return createDataProducts(
           prod.supplier.name,
-          categoryId === '3' || categoryId === '6' ? prod.size : '',
+          prod.specifications,
           prod.ubication,
           prod.code,
           prod.quantity,
@@ -189,13 +183,17 @@ function ProductsTable() {
     <>
       <div className="d-flex" style={{ minHeight: '100vh' }}>
         <Navbar />
-        <div className="my-auto mx-auto" style={{ width: '70%' }}>
+        <div
+          className="my-auto mx-auto"
+          style={{ width: '80%', maxWidth: '1200px' }}
+        >
           <h1
             className="text-center fw-bold mt-5 pt-4 mb-3"
             style={{ color: '#791021' }}
           >
             {nameCategory}
           </h1>
+
           {rolId == '1' && (
             <div className="d-flex justify-content-center mb-4">
               <button
@@ -203,7 +201,7 @@ function ProductsTable() {
                 type="button"
                 style={{ width: '20%' }}
                 onClick={() => {
-                  setModalUpdateStock(true), setIsExit(false)
+                  navigate(`/productEntry/${categoryId}`)
                 }}
               >
                 <span className="my-auto">
@@ -215,7 +213,7 @@ function ProductsTable() {
                 type="submit"
                 style={{ width: '20%' }}
                 onClick={() => {
-                  setModalUpdateStock(true), setIsExit(true)
+                  navigate(`/productExit/${categoryId}`)
                 }}
               >
                 <span className="my-auto">
@@ -224,12 +222,14 @@ function ProductsTable() {
               </button>
             </div>
           )}
+
           <Paper
             sx={{
               width: '95%',
               overflow: 'hidden',
               borderRadius: '5px',
               margin: 'auto',
+              marginRight: '20px', // Añade margen a la derecha
             }}
           >
             <TableContainer sx={{ minHeight: 340, borderRadius: '5px' }}>
@@ -246,8 +246,7 @@ function ProductsTable() {
                           color: '#fff',
                         }}
                       >
-                        {' '}
-                        {column.label == 'Agregar' && rolId == '1' && (
+                        {column.label === 'Agregar' && rolId === '1' && (
                           <FaPlus
                             className="text-white mx-2"
                             type="button"
@@ -268,30 +267,28 @@ function ProductsTable() {
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                    .map((row, index) => {
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={`row${index}`}
-                        >
-                          {columnProducts.map((column) => {
-                            const value = row[column.id]
-                            return (
-                              <TableCell
-                                key={`data${column?.id}`}
-                                align={column.align}
-                              >
-                                {column.format && typeof value === 'number'
-                                  ? column.format(value)
-                                  : value}
-                              </TableCell>
-                            )
-                          })}
-                        </TableRow>
-                      )
-                    })}
+                    .map((row, index) => (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={`row${index}`}
+                      >
+                        {columnProducts.map((column) => {
+                          const value = row[column.id]
+                          return (
+                            <TableCell
+                              key={`data${column?.id}`}
+                              align={column.align}
+                            >
+                              {column.format && typeof value === 'number'
+                                ? column.format(value)
+                                : value}
+                            </TableCell>
+                          )
+                        })}
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -306,18 +303,6 @@ function ProductsTable() {
             />
           </Paper>
         </div>
-        <UpdateStock
-          modalUpdateStock={modalUpdateStock}
-          handleCloseUpdateStock={() => setModalUpdateStock(false)}
-          productsValues={arrayProduct}
-          isExit={isExit}
-          fetchProductTable={fetchData}
-          setShowModal={setShowModal}
-          setModalMessage={setModalMessage}
-          setModalTitle={setModalTitle}
-          setIsSuccess={setIsSuccess}
-          categoryId={categoryId}
-        />
       </div>
       {/* Mostrar el modal con título personalizado */}
       <OperationModal

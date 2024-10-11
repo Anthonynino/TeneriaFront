@@ -21,12 +21,13 @@ export const getOneSupplier = (supplierId) => {
   return axios.get(`/supplier/${supplierId}`)
 }
 
-export const addSuppliersRequest = (name, rif, ubication, isNational) => {
+export const addSuppliersRequest = (companyName, rif, location, fullCode, IsInNationalTerritory) => {
   const response = axios.post(`/createSupplier`, {
-    name,
+    companyName,
     rif,
-    ubication,
-    isNational,
+    location,
+    fullCode,
+    IsInNationalTerritory,
   })
 
   // Invalida el caché de proveedores, para forzar que se recargue al hacer getAllSuppliers
@@ -39,13 +40,15 @@ export const editSupplier = (
   supplierId,
   companyName,
   location,
-  IsInNationalTerritory
+  IsInNationalTerritory,
+  finalCode
 ) => {
   const response = axios.put(`/editSupplier`, {
     supplierId,
     companyName,
     location,
     IsInNationalTerritory,
+    finalCode
   })
 
   // Invalida el caché de proveedores, para forzar que se recargue al hacer getAllSuppliers

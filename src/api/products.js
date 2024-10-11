@@ -50,21 +50,17 @@ export const createProductRequest = (
   name,
   code,
   ubication,
-  quantity,
-  size,
+  specifications,
   categoryId,
-  supplierId,
-  userId
+  supplierId
 ) => {
   const response = axios.post(`/createProduct`, {
     name,
     code,
     ubication,
-    quantity,
-    size,
+    specifications,
     categoryId,
     supplierId,
-    userId,
   })
 
   // Invalida el caché de proveedores, para forzar que se recargue al hacer getAllSuppliers
@@ -82,13 +78,16 @@ export const deleteProduct = (id, categoryId) => {
   return response
 }
 
-export const updateStock = (updateData, categoryId) => {
-  const response = axios.post(`/generateEntryOrExit`, {
-    productId: updateData.productId,
-    quantity: updateData.count,
-    userId: updateData.userId,
-    departmentId: updateData.departmentId,
-    movementType: updateData.movementType,
+export const creteEntryProducts = (
+  arrayProducts,
+  userId,
+  recipientName,
+  categoryId
+) => {
+  const response = axios.post(`/creteEntryProducts`, {
+    arrayProducts,
+    userId,
+    recipientName,
   })
 
   // Invalida el caché de proveedores, para forzar que se recargue al hacer getAllSuppliers

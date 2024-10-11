@@ -4,7 +4,7 @@ import { Modal } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom';
 
-function OperationModal({ showModal, handleClose, isSuccess, message, back }) {
+function OperationModal({ showModal, handleClose, isSuccess, message}) {
   const navigate = useNavigate()
   return (
     <Modal show={showModal} centered onHide={handleClose}>
@@ -42,7 +42,7 @@ function OperationModal({ showModal, handleClose, isSuccess, message, back }) {
             <button
               className="btn glow-on-hover mx-1 px-4"
               type="button"
-              onClick={() => back == true ? navigate(-1) : handleClose()}
+              onClick={() => isSuccess == true ? navigate(-1) : handleClose()}
             >
               <span className="my-auto text-white">OK</span>
             </button>

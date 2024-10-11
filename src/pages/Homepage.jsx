@@ -2,6 +2,7 @@ import Navbar from '../Navbar'
 import { useEffect, useState } from 'react'
 import { getAllQuantities } from '../api/dashboard'
 import { FaTruck, FaBox, FaChartBar } from 'react-icons/fa'
+import Tooltip from '@mui/material/Tooltip' // Importar Tooltip de Material-UI
 
 function Homepage() {
   const [productNumber, setProductNumber] = useState(0)
@@ -14,8 +15,9 @@ function Homepage() {
       id: 2,
       title: 'Proveedores',
       icon: <FaTruck size={48} />,
-      color: ' #999999',
+      color: '#999999',
       total: supplierNumber,
+      description: `Hay ${supplierNumber} proveedores disponibles.`, // Descripción mejorada
     },
     {
       id: 3,
@@ -23,6 +25,7 @@ function Homepage() {
       icon: <FaBox size={48} />,
       color: '#801817',
       total: productNumber,
+      description: `Actualmente hay ${productNumber} productos.`, // Descripción mejorada
     },
     {
       id: 4,
@@ -30,6 +33,7 @@ function Homepage() {
       icon: <FaChartBar size={48} />,
       color: '#4E3D2E',
       total: reportNumber,
+      description: `Se han generado ${reportNumber} reportes.`, // Descripción mejorada
     },
   ]
 
@@ -67,21 +71,25 @@ function Homepage() {
                 key={card.id}
                 className="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex flex-column justify-content-center mx-auto"
               >
-                <div
-                  style={{ background: card.color }}
-                  className="no-underline text-white p-3 my-2 rounded-4 shadow"
-                >
-                  <div
-                    className="text-center"
-                    style={{ filter: 'opacity(0.4)' }}
-                  >
-                    {card.icon}
-                  </div>
-                  <h3 className="text-center">{card.title}</h3>
-                  <p className="text-center">
-                    <b style={{ fontSize: '24px' }}>{card.total}</b>
-                  </p>
-                </div>
+                <Tooltip title={card.description} arrow>
+                  <span>
+                    <div
+                      style={{ background: card.color }}
+                      className="no-underline text-white p-3 my-2 rounded-4 shadow"
+                    >
+                      <div
+                        className="text-center"
+                        style={{ filter: 'opacity(0.4)' }}
+                      >
+                        {card.icon}
+                      </div>
+                      <h3 className="text-center">{card.title}</h3>
+                      <p className="text-center">
+                        <b style={{ fontSize: '24px' }}>{card.total}</b>
+                      </p>
+                    </div>
+                  </span>
+                </Tooltip>
               </div>
             )
           })}
