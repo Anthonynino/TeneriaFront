@@ -99,7 +99,7 @@ export const creteEntryProducts = (
 export const createProductExit = (
   arrayProducts,
   userId,
-  selectedDepartment,
+  departmentId,
   description,
   recipientName,
   categoryId
@@ -107,7 +107,7 @@ export const createProductExit = (
   const response = axios.post('createProductExit', {
     arrayProducts,
     userId,
-    selectedDepartment,
+    departmentId,
     description,
     recipientName,
   })
