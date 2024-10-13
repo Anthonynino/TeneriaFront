@@ -95,3 +95,23 @@ export const creteEntryProducts = (
 
   return response
 }
+
+export const createProductExit = (
+  arrayProducts,
+  userId,
+  selectedDepartment,
+  description,
+  recipientName,
+  categoryId
+) => {
+  const response = axios.post('createProductExit', {
+    arrayProducts,
+    userId,
+    selectedDepartment,
+    description,
+    recipientName,
+  })
+  // Invalida el caché de proveedores, para forzar que se recargue al hacer getAllSuppliers
+  clearCache(`products_${categoryId}`)
+  return response
+}

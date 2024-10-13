@@ -1,10 +1,15 @@
-import { AiOutlineCheckCircle } from 'react-icons/ai';
-import { VscError } from "react-icons/vsc";
+import { AiOutlineCheckCircle } from 'react-icons/ai'
+import { VscError } from 'react-icons/vsc'
 import { Modal } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 
-function OperationModal({ showModal, handleClose, isSuccess, message}) {
+function OperationModal({
+  showModal,
+  handleClose,
+  isSuccess,
+  message,
+}) {
   const navigate = useNavigate()
   return (
     <Modal show={showModal} centered onHide={handleClose}>
@@ -42,7 +47,7 @@ function OperationModal({ showModal, handleClose, isSuccess, message}) {
             <button
               className="btn glow-on-hover mx-1 px-4"
               type="button"
-              onClick={() => isSuccess == true ? navigate(-1) : handleClose()}
+              onClick={() => (isSuccess == true ? navigate(-1) : handleClose())}
             >
               <span className="my-auto text-white">OK</span>
             </button>
@@ -58,7 +63,7 @@ OperationModal.propTypes = {
   handleClose: PropTypes.func.isRequired,
   isSuccess: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
-  back: PropTypes.bool
+  back: PropTypes.bool,
 }
 
 export default OperationModal

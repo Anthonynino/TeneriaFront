@@ -3,7 +3,12 @@ import { FaPlus, FaTrash } from 'react-icons/fa' // Asegúrate de instalar react
 import Navbar from '../Navbar'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getProductsRequest } from '../api/products'
-import OperationModal from './SuccessfulOperation'
+import { creteEntryProducts } from '../api/products'
+import { AiOutlineCheckCircle } from 'react-icons/ai'
+import { VscError } from 'react-icons/vsc'
+import { Modal } from 'react-bootstrap'
+import axios from '../api/axios'
+import { AiFillFilePdf } from 'react-icons/ai' // Importa el ícono de PDF
 
 const ProductEntry = () => {
   const navigate = useNavigate()
@@ -65,7 +70,7 @@ const ProductEntry = () => {
         // Si el producto es nuevo, agregarlo a la lista
         setInvoiceItems((prevItems) => [
           ...prevItems,
-          { name: product.name, quantity: parseInt(countPlus) },
+          { id: product.id, name: product.name, quantity: parseInt(countPlus) },
         ])
       }
 
@@ -87,7 +92,7 @@ const ProductEntry = () => {
 
   const handleCloseModal = () => setShowModal(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (invoiceItems.length === 0) {
@@ -107,9 +112,49 @@ const ProductEntry = () => {
     }
 
     try {
-      console.log('hola')
+      const response = await creteEntryProducts(
+        invoiceItems,
+        user.id,
+        recipientName,
+        categoryId
+      )
+      if (response.status === 200) {
+        setModalMessage('El stock se actualizó correctamente.')
+        setIsSuccess(true)
+        setShowModal(true)
+      }
     } catch (error) {
-      console.error('Error al ingresar la entrada de los productos:', error)
+      console.error('Error al actualizar el stock:', error)
+      setModalMessage(error.response?.data?.message || 'Error desconocido')
+      setIsSuccess(false)
+      setShowModal(true)
+    }
+  }
+
+  const handleGenerateInvoice = async () => {
+    try {
+      // Suponiendo que `invoiceItems` es un arreglo con los productos y el ID del usuario está disponible
+      const formattedDate = `${new Date().toISOString().split('T')[0]}` // Formato de la fecha YYYY-MM-DD
+
+      // Llamada a la API para generar la factura (suponiendo que tienes el endpoint en el backend)
+      const response = await axios.post(
+        `/generateInvoice`, // Cambia esta URL al endpoint correcto
+        { items: invoiceItems, recipientName }, // Datos que enviarás en la petición
+        {
+          responseType: 'blob', // Obtener la respuesta como un archivo blob
+        }
+      )
+
+      // Crear enlace temporal para descargar el archivo PDF
+      const urlBlob = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = urlBlob
+      link.setAttribute('download', `factura-${formattedDate}.pdf`) // Nombre del archivo
+      document.body.appendChild(link)
+      link.click() // Hacer clic en el enlace para descargar
+      link.remove() // Eliminar el enlace temporal
+    } catch (error) {
+      console.error('Error al generar la factura:', error)
     }
   }
 
@@ -197,7 +242,7 @@ const ProductEntry = () => {
                       Cantidad
                     </th>
                     <th style={{ color: '#791021', textAlign: 'center' }}>
-                      Unidad
+                      Producto
                     </th>
                     <th style={{ color: '#791021', textAlign: 'center' }}>
                       Acciones
@@ -247,6 +292,7 @@ const ProductEntry = () => {
                     className="form-control"
                     value={recipientName}
                     onChange={handleRecipientChange}
+                    placeholder="Nombre completo"
                   />
                 </div>
 
@@ -280,12 +326,74 @@ const ProductEntry = () => {
           </div>
         </div>
       </div>
-      <OperationModal
-        showModal={showModal}
-        handleClose={handleCloseModal}
-        isSuccess={isSuccess}
-        message={modalMessage}
-      />
+      <Modal show={showModal} centered onHide={handleCloseModal}>
+        <div className="p-5 text-center fonts-letter rounded-1">
+          <div className="d-flex flex-column">
+            {isSuccess ? (
+              <AiOutlineCheckCircle
+                className="mx-auto mb-1"
+                size={160}
+                style={{ color: '#DAA520' }} // Color para éxito
+              />
+            ) : (
+              <VscError
+                className="mx-auto mb-1"
+                size={160}
+                style={{ color: '#791021' }} // Color para error
+              />
+            )}
+            <h3 style={{ color: isSuccess ? '#DAA520' : '#791021' }}>
+              {isSuccess ? '¡Éxito!' : '¡Error!'}
+            </h3>
+            <p className="text-secondary" style={{ fontSize: '17px' }}>
+              {modalMessage}
+            </p>
+          </div>
+          <div className="mt-1 d-flex justify-content-center">
+            {/* Botón Salir con el estilo existente */}
+            <button
+              className="btn glow-on-hover mx-1 px-4 py-2 button-hover rounded"
+              type="button"
+              style={{
+                background: isSuccess ? '#DAA520' : '#791021',
+                width: '160px',
+                padding: '0.1rem',
+              }}
+              onClick={() => {
+                // Si es exitoso, navega hacia atrás; si no, cierra la modal
+                if (isSuccess) {
+                  navigate(-1) // Regresar a la tabla
+                } else {
+                  handleCloseModal() // Solo cerrar la modal
+                }
+              }}
+            >
+              <span className="my-auto text-white">
+                {isSuccess ? 'Salir' : 'OK'}
+              </span>
+            </button>
+            {/* Condicional para mostrar el botón de generar factura */}
+            {isSuccess && (
+              <button
+                className="btn glow-on-hover mx-1 px-2 button-hover rounded"
+                type="button"
+                style={{
+                  background: '#791021',
+                  width: 'fit-content',
+                  padding: '0.1rem',
+                }}
+                onClick={handleGenerateInvoice} // Acción para generar la factura
+              >
+                <span className="me-1">
+                  <AiFillFilePdf size={20} className="text-white" />{' '}
+                  {/* Ícono de archivo PDF */}
+                </span>
+                <span className="my-auto text-white">Generar Factura</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </Modal>
     </>
   )
 }
