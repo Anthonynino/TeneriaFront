@@ -88,6 +88,7 @@ function ReportProducts() {
       setMessageModal('Debes seleccionar ambas fechas.')
       return // Salir de la función si falta alguna fecha
     }
+
     try {
       const formattedDate = `${new Date().toISOString().split('T')[0]}` // Formatear la fecha a YYYY-MM-DD
 
@@ -107,7 +108,25 @@ function ReportProducts() {
       link.click() // Hacer clic en el enlace para descargar
       link.remove() // Eliminar el enlace temporal
     } catch (error) {
-      console.error(error) // Manejar errores
+      if (error.response) {
+        // Manejo del error 404 específicamente
+        if (error.response.status === 404) {
+          setShowModal(true)
+          setMessageModal(
+            'No se encontraron registros en el rango de fechas seleccionado.'
+          ) // Mensaje específico para error 404
+        } else {
+          // Mensaje general para otros errores que no sean 404
+          const errorMessage =
+            error.response.data.message ||
+            'Error desconocido al descargar el reporte.'
+          setShowModal(true)
+          setMessageModal(errorMessage)
+        }
+      } else {
+        setShowModal(true)
+        setMessageModal('Error de conexión o inesperado. Intente nuevamente.')
+      }
     }
   }
 

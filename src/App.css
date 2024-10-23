@@ -50,7 +50,7 @@ form .button-submit:hover {
 }
 
 .input-login::placeholder {
-  color: #fff;
+  color: #fff !important;
 }
 
 .alert-animation {
