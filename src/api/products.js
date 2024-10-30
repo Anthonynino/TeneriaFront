@@ -27,7 +27,7 @@ export const editProductRequest = (
   name,
   code,
   ubication,
-  size,
+  specifications,
   categoryId,
   supplierId
 ) => {
@@ -36,7 +36,7 @@ export const editProductRequest = (
     name,
     code,
     ubication,
-    size,
+    specifications,
     categoryId,
     supplierId,
   })

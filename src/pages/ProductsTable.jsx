@@ -36,7 +36,7 @@ function ProductsTable() {
 
   //Columnas predefinidas para la tabla
   const columnProducts = [
-    { id: 'add', label: rolId == '1' && 'Agregar', minWidth: 20 },
+    { id: 'add', label: rolId == 1 && 'Agregar', minWidth: 20 },
     { id: 'name', label: 'Nombre', minWidth: 70 },
     { id: 'quantity', label: 'Cantidad', minWidth: 20 },
     { id: 'code', label: 'Código', minWidth: 20 },
@@ -163,13 +163,13 @@ function ProductsTable() {
             </>
           )
         return createDataProducts(
-          prod.supplier.name,
+          prod.supplierName,
           prod.specifications,
           prod.ubication,
           prod.code,
           prod.quantity,
           prod.name,
-          rolId === '1' ? icons : ''
+          rolId === 1 ? icons : ''
         )
       })
 
@@ -194,7 +194,7 @@ function ProductsTable() {
             {nameCategory}
           </h1>
 
-          {rolId == '1' && (
+          {rolId == 1 && (
             <div className="d-flex justify-content-center mb-4">
               <button
                 className="btn button-submit text-white mx-2"
@@ -246,7 +246,7 @@ function ProductsTable() {
                           color: '#fff',
                         }}
                       >
-                        {column.label === 'Agregar' && rolId === '1' && (
+                        {column.label === 'Agregar' && rolId === 1 && (
                           <FaPlus
                             className="text-white mx-2"
                             type="button"

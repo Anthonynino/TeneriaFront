@@ -22,7 +22,7 @@ function ProvidersTable() {
 
   //Columnas predefinidas para la tabla
   const columnSuppliers = [
-    { id: 'add', label: rolId == '1' && 'Agregar', minWidth: 20 },
+    { id: 'add', label: rolId == 1 && 'Agregar', minWidth: 20 },
     { id: 'name', label: 'Nombre', minWidth: 70 },
     { id: 'rif', label: 'RIF', minWidth: 70 },
     { id: 'code', label: 'Codigo', minWidth: 70 },
@@ -88,7 +88,7 @@ function ProvidersTable() {
           rif,
           name,
           code,
-          rolId == '1' ? icons : ''
+          rolId == 1 ? icons : ''
         )
       })
 
@@ -132,7 +132,7 @@ function ProvidersTable() {
                     >
                       {column.label == 'Agregar' && (
                         <>
-                          {rolId === '1' && (
+                          {rolId === 1 && (
                             <FaPlus
                               className="text-white mx-2"
                               type="button"

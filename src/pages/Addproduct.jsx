@@ -37,7 +37,7 @@ const ProductForm = () => {
     const fetchData = async () => {
       const categoriesRes = await getAllCategories()
       const currentCategory = categoriesRes.data.find(
-        (c) => c.id === categoryId
+        (c) => c.id === parseInt(categoryId)
       )
       setGetCategories(currentCategory)
 
@@ -80,7 +80,13 @@ const ProductForm = () => {
         setUbicationProduct('')
         setSpecifications('')
         navigate(-1)
+        setIsSuccess(true)
+        setModalMessage('¡Operación realizada exitosamente!')
+        setShowModal(true)
       } catch (error) {
+        setIsSuccess(false)
+        setModalMessage('Hubo un problema al realizar la operación.')
+        setShowModal(true)
         const errorMessage =
           error.response?.data?.message || 'Error desconocido'
         triggerModal(errorMessage, false)

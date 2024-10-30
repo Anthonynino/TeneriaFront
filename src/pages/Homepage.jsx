@@ -61,7 +61,7 @@ function Homepage() {
         <Navbar />
         <div className="w-50 row my-auto mx-auto">
           <h1 className="text-center fw-bold" style={{ color: '#791021' }}>
-            {user?.rolId === '1'
+            {user?.rolId === 1
               ? 'Panel de Administración'
               : 'Panel de Información'}
           </h1>

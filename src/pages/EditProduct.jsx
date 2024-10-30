@@ -101,7 +101,7 @@ const EditProduct = () => {
         }
         if (categoriesRes && categoriesRes.data) {
           const currentCategory = categoriesRes.data.find(
-            (c) => c.id === categoryId
+            (c) => c.id === parseInt(categoryId)
           )
           setCategories(currentCategory)
         }

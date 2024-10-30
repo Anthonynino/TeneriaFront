@@ -105,7 +105,7 @@ function LoginPage() {
                 <input
                   type="text"
                   className="form-control shadow-sm rounded-4 py-2 text-white input-login"
-                  placeholder="nombre@ejemplo.com"
+                  placeholder="usuarioEjemplo"
                   style={{ background: 'transparent' }}
                 />
               </div>
